@@ -685,7 +685,7 @@ const QUESTION_SETS = [
     triggerAt: 125,
     context: 'At 2 minutes',
     text: 'Is the child still seizing?',
-    sub: 'Are the shaking or stiffening movements still happening?',
+    sub: 'Are the shaking or stiffening movements still happening? Tap the same answer twice to confirm.',
     options: [
       { label: 'Yes — still seizing',  value: 'yes', icon: '!', cls: 'no'  },
       { label: 'No — it has stopped',  value: 'no',  icon: '✓', cls: 'yes' },
@@ -914,11 +914,32 @@ function showQuestion(q) {
     showScreen('screen-question');
     return;
   }
+  const needsDoubleTapConfirm = q.id === 'still_seizing_2';
+  let armedAnswer = null;
   q.options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'q-btn ' + opt.cls;
     btn.innerHTML = `<div class="q-btn-icon">${opt.icon}</div><div>${opt.label}</div>`;
-    btn.onclick = () => answerQuestion(q, opt);
+    btn.dataset.label = opt.label;
+    btn.onclick = () => {
+      if (!needsDoubleTapConfirm) {
+        answerQuestion(q, opt);
+        return;
+      }
+
+      if (armedAnswer !== opt.value) {
+        armedAnswer = opt.value;
+        opts.querySelectorAll('.q-btn').forEach(other => {
+          const labelEl = other.querySelector('div:nth-child(2)');
+          if (labelEl) labelEl.textContent = other.dataset.label || '';
+        });
+        const labelEl = btn.querySelector('div:nth-child(2)');
+        if (labelEl) labelEl.textContent = 'Tap again to confirm';
+        return;
+      }
+
+      answerQuestion(q, opt);
+    };
     opts.appendChild(btn);
   });
   showScreen('screen-question');
