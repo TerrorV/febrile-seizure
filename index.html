@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Seizure First Aid</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2333;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #f0ede8;
+    --text2: #9ba3b8;
+    --text3: #5a6278;
+
+    --ok:    #4ade80;  --ok-dim:    #14532d;  --ok-bg:    rgba(74,222,128,0.08);
+    --warn:  #fbbf24;  --warn-dim:  #78350f;  --warn-bg:  rgba(251,191,36,0.08);
+    --alert: #f87171;  --alert-dim: #7f1d1d;  --alert-bg: rgba(248,113,113,0.08);
+    --info:  #60a5fa;  --info-dim:  #1e3a5f;  --info-bg:  rgba(96,165,250,0.08);
+  }
+
+  html, body {
+    height: 100%; width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  /* ── App shell ── */
+  #app {
+    height: 100%; display: flex; flex-direction: column;
+    max-width: 480px; margin: 0 auto;
+    position: relative;
+  }
+
+  /* ── Timer strip (always visible) ── */
+  #timer-strip {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 10px;
+  }
+  #timer-strip.hidden { display: none; }
+
+  .strip-timer {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px; font-weight: 500;
+    letter-spacing: -1px;
+    color: var(--text);
+    transition: color 0.4s;
+  }
+  .strip-timer.phase-warn  { color: var(--warn); }
+  .strip-timer.phase-alert { color: var(--alert); }
+
+  .strip-phase {
+    font-size: 12px; font-weight: 500;
+    padding: 4px 10px; border-radius: 20px;
+    background: var(--ok-bg); color: var(--ok);
+    border: 1px solid rgba(74,222,128,0.2);
+    transition: all 0.4s; white-space: nowrap;
+  }
+  .strip-phase.phase-warn  { background: var(--warn-bg);  color: var(--warn);  border-color: rgba(251,191,36,0.2); }
+  .strip-phase.phase-alert { background: var(--alert-bg); color: var(--alert); border-color: rgba(248,113,113,0.2); }
+
+  .btn-stopped {
+    padding: 7px 13px; border-radius: 10px;
+    background: var(--ok-bg); color: var(--ok);
+    border: 1.5px solid rgba(74,222,128,0.35);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.12s, transform 0.08s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-stopped:active { transform: scale(0.96); }
+
+  /* ── Milestone bar ── */
+  #milestone-bar {
+    height: 3px; background: var(--surface2); flex-shrink: 0;
+    position: relative; overflow: visible;
+  }
+  #milestone-bar.hidden { display: none; }
+  #ms-fill {
+    height: 100%; background: var(--ok); width: 0%;
+    transition: width 0.5s linear, background 0.4s;
+  }
+  .ms-tick {
+    position: absolute; top: -4px;
+    width: 2px; height: 11px;
+    background: var(--border2); border-radius: 1px;
+  }
+  .ms-tick.reached { background: var(--alert); }
+
+  /* ── Screen container ── */
+  #screen-wrap {
+    flex: 1; overflow: hidden; position: relative;
+  }
+  .screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    padding: 28px 24px 24px;
+    opacity: 0; pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.25s, transform 0.25s;
+    overflow-y: auto;
+  }
+  .screen.active {
+    opacity: 1; pointer-events: all;
+    transform: translateY(0);
+  }
+
+  /* ── Start screen ── */
+  #screen-start {
+    align-items: center; justify-content: center; text-align: center; gap: 20px;
+  }
+  .start-icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--alert-bg); border: 2px solid rgba(248,113,113,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; margin-bottom: 4px;
+  }
+  .start-title {
+    font-size: 26px; font-weight: 600; line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+  .start-sub {
+    font-size: 15px; color: var(--text2); line-height: 1.5; max-width: 300px;
+  }
+  .btn-start-main {
+    margin-top: 8px;
+    width: 100%; padding: 20px;
+    background: var(--alert); color: #fff;
+    border: none; border-radius: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px; font-weight: 600;
+    cursor: pointer; letter-spacing: -0.3px;
+    box-shadow: 0 0 40px rgba(248,113,113,0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-start-main:active { transform: scale(0.97); box-shadow: 0 0 20px rgba(248,113,113,0.2); }
+  .start-note { font-size: 12px; color: var(--text3); }
+
+  /* ── Question screen ── */
+  .q-context {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 16px;
+  }
+  .q-text {
+    font-size: 24px; font-weight: 600; line-height: 1.25;
+    letter-spacing: -0.4px; color: var(--text);
+    margin-bottom: 10px;
+  }
+  .q-sub {
+    font-size: 14px; color: var(--text2); line-height: 1.5;
+    margin-bottom: 28px;
+  }
+  .q-options { display: flex; flex-direction: column; gap: 12px; }
+  .q-btn {
+    width: 100%; padding: 18px 20px;
+    border-radius: 14px; border: 1.5px solid var(--border2);
+    background: var(--surface); color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px; font-weight: 500;
+    cursor: pointer; text-align: left;
+    display: flex; align-items: center; gap: 14px;
+    transition: background 0.12s, border-color 0.12s, transform 0.08s;
+    -webkit-tap-highlight-color: transparent;
+    line-height: 1.3;
+  }
+  .q-btn:active { transform: scale(0.98); }
+  .q-btn.yes { border-color: rgba(74,222,128,0.4); }
+  .q-btn.yes:hover, .q-btn.yes:active { background: var(--ok-bg); }
+  .q-btn.no  { border-color: rgba(248,113,113,0.3); }
+  .q-btn.no:hover,  .q-btn.no:active  { background: var(--alert-bg); }
+  .q-btn.unsure { border-color: rgba(251,191,36,0.3); }
+  .q-btn.unsure:hover, .q-btn.unsure:active { background: var(--warn-bg); }
+  .q-btn-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .yes .q-btn-icon  { background: var(--ok-bg); }
+  .no  .q-btn-icon  { background: var(--alert-bg); }
+  .unsure .q-btn-icon { background: var(--warn-bg); }
+
+  /* ── Alert banner (milestone) ── */
+  #alert-banner {
+    display: none; position: fixed;
+    top: 56px; left: 50%; transform: translateX(-50%);
+    width: calc(100% - 32px); max-width: 448px;
+    z-index: 100;
+    border-radius: 14px; padding: 14px 18px;
+    background: var(--surface);
+    border: 1.5px solid rgba(248,113,113,0.5);
+    box-shadow: 0 8px 32px rgba(248,113,113,0.2);
+    animation: banner-in 0.3s ease;
+  }
+  @keyframes banner-in { from { opacity: 0; transform: translateX(-50%) translateY(-8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+  #alert-banner.visible { display: block; }
+  .banner-label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--alert); margin-bottom: 4px; }
+  .banner-text  { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.4; }
+  .banner-close { position: absolute; top: 10px; right: 12px; background: none; border: none; color: var(--text3); font-size: 20px; cursor: pointer; line-height: 1; }
+
+  /* ── Summary screen ── */
+  #screen-summary { gap: 0; }
+  .summary-header {
+    text-align: center; padding: 8px 0 24px;
+  }
+  .summary-title { font-size: 22px; font-weight: 600; letter-spacing: -0.4px; margin-bottom: 6px; }
+  .summary-sub   { font-size: 14px; color: var(--text2); }
+
+  .summary-timer-big {
+    text-align: center; margin-bottom: 24px;
+    padding: 20px; border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+  }
+  .summary-timer-big .big-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 52px; font-weight: 500; letter-spacing: -2px;
+    line-height: 1;
+  }
+  .summary-timer-big .big-label { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+  .summary-section { margin-bottom: 16px; }
+  .summary-section-title {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 10px;
+  }
+  .summary-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    margin-bottom: 6px; font-size: 14px; line-height: 1.4;
+  }
+  .summary-item .si-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0; margin-top: 5px;
+  }
+  .si-ok    { background: var(--ok); }
+  .si-warn  { background: var(--warn); }
+  .si-alert { background: var(--alert); }
+  .si-info  { background: var(--info); }
+
+  .ambulance-box {
+    background: var(--alert-bg);
+    border: 1.5px solid rgba(248,113,113,0.3);
+    border-radius: 14px; padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+  .ambulance-box h3 {
+    font-size: 13px; font-weight: 600; color: var(--alert);
+    letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .ambulance-script {
+    font-size: 15px; line-height: 1.7; color: var(--text);
+    font-style: italic;
+  }
+  .ambulance-script strong { font-style: normal; color: var(--alert); }
+
+  .btn-share {
+    width: 100%; padding: 16px;
+    background: var(--surface2); color: var(--text);
+    border: 1.5px solid var(--border2);
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 500;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 10px;
+    transition: background 0.12s;
+  }
+  .btn-share:hover { background: var(--surface); }
+
+  .btn-restart {
+    width: 100%; padding: 14px;
+    background: transparent; color: var(--text3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; cursor: pointer;
+    transition: color 0.12s;
+  }
+  .btn-restart:hover { color: var(--text); }
+
+  /* ── Doing OK screen (between milestones) ── */
+  .status-card {
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 16px; padding: 20px;
+    margin-bottom: 16px; text-align: center;
+  }
+  .status-card .sc-emoji { font-size: 36px; margin-bottom: 8px; }
+  .status-card .sc-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .status-card .sc-body  { font-size: 14px; color: var(--text2); line-height: 1.5; }
+
+  .next-card {
+    background: var(--warn-bg); border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
+  }
+  .next-card-label { font-size: 11px; color: var(--warn); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .next-card-text  { font-size: 15px; color: var(--text); font-weight: 500; }
+
+  .action-list { display: flex; flex-direction: column; gap: 10px; }
+  .action-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px; border-radius: 12px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 15px; line-height: 1.4; color: var(--text);
+  }
+  .action-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--surface2); border: 1px solid var(--border2);
+    color: var(--text2); font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  @media (min-height: 700px) {
+    .q-text { font-size: 26px; }
+    .q-btn  { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Always-on timer strip -->
+  <div id="timer-strip" class="hidden">
+    <div>
+      <div class="strip-timer" id="strip-timer">00:00</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px">seizure duration</div>
+    </div>
+    <div class="strip-phase" id="strip-phase">Observing</div>
+    <button class="btn-stopped" onclick="seizureStopped()">✓ Stopped</button>
+  </div>
+
+  <!-- Progress bar with milestone ticks -->
+  <div id="milestone-bar" class="hidden">
+    <div id="ms-fill"></div>
+    <div class="ms-tick" style="left:6.67%" title="2 min"></div>
+    <div class="ms-tick" style="left:50%"   title="15 min"></div>
+    <div class="ms-tick" style="left:100%"  title="30 min"></div>
+  </div>
+
+  <!-- Milestone alert banner -->
+  <div id="alert-banner">
+    <div class="banner-label" id="banner-label">Action needed</div>
+    <div class="banner-text"  id="banner-text"></div>
+    <button class="banner-close" onclick="closeBanner()">×</button>
+  </div>
+
+  <!-- Screen wrap -->
+  <div id="screen-wrap">
+
+    <!-- START -->
+    <div class="screen active" id="screen-start">
+      <div class="start-icon">🚨</div>
+      <div class="start-title">Seizure First Aid</div>
+      <div class="start-sub">Press start the moment the seizure begins. I'll guide you through what to watch for.</div>
+      <button class="btn-start-main" onclick="startSession()">Start timer now</button>
+      <div class="start-note">Works without a thermometer, scale, or watch</div>
+    </div>
+
+    <!-- QUESTION -->
+    <div class="screen" id="screen-question">
+      <div class="q-context" id="q-context"></div>
+      <div class="q-text"    id="q-text"></div>
+      <div class="q-sub"     id="q-sub"></div>
+      <div class="q-options" id="q-options"></div>
+    </div>
+
+    <!-- WAITING (between question bursts) -->
+    <div class="screen" id="screen-waiting">
+      <div class="status-card">
+        <div class="sc-emoji" id="w-emoji">👁️</div>
+        <div class="sc-title" id="w-title">Keep watching</div>
+        <div class="sc-body"  id="w-body"></div>
+      </div>
+      <div class="next-card" id="next-card" style="display:none">
+        <div class="next-card-label">Next check-in</div>
+        <div class="next-card-text" id="next-card-text"></div>
+      </div>
+      <div class="action-list" id="w-actions"></div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="screen" id="screen-summary">
+      <div class="summary-header">
+        <div class="summary-title">Seizure summary</div>
+        <div class="summary-sub" id="sum-sub">For ambulance handover</div>
+      </div>
+
+      <div class="summary-timer-big">
+        <div class="big-num"   id="sum-duration">--:--</div>
+        <div class="big-label" id="sum-dur-label">Total seizure duration</div>
+      </div>
+
+      <div class="ambulance-box">
+        <h3>📞 Tell the ambulance</h3>
+        <div class="ambulance-script" id="ambulance-script"></div>
+      </div>
+
+      <div class="summary-section">
+        <div class="summary-section-title">What happened</div>
+        <div id="sum-items"></div>
+      </div>
+
+      <button class="btn-share" onclick="shareReport()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Share / copy summary
+      </button>
+      <button class="btn-restart" onclick="restart()">Start over</button>
+    </div>
+
+  </div><!-- /screen-wrap -->
+</div><!-- /app -->
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────────
+let timerInterval = null;
+let elapsed = 0;
+let startWall = null;
+let running = false;
+let sessionEnded = false;
+let milestonesFired = { 2: false, 15: false, 30: false };
+let answers = [];   // { qid, answer, label, elapsed }
+let queuedQuestions = [];
+let currentQ = null;
+let waitingActions = [];
+
+// ── Audio ────────────────────────────────────────────────────────────────────
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function beep(freq, dur, vol, t, type='sine') {
+  const ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t + 0.01);
+  g.gain.setValueAtTime(vol, t + dur - 0.03);
+  g.gain.linearRampToValueAtTime(0, t + dur);
+  o.start(t); o.stop(t + dur);
+}
+function chime2() {
+  const ctx = getAudio(), t = ctx.currentTime;
+  beep(880,0.18,0.22,t); beep(1100,0.18,0.18,t+0.05);
+  beep(880,0.18,0.22,t+0.5); beep(1100,0.18,0.18,t+0.55);
+}
+function alarm3() {
+  const ctx = getAudio(), t = ctx.currentTime;
+  for(let i=0;i<3;i++){beep(1400,0.14,0.28,t+i*0.22,'square');beep(1000,0.06,0.14,t+i*0.22+0.14,'square');}
+  for(let i=0;i<3;i++){beep(1400,0.14,0.28,t+1+i*0.22,'square');beep(1000,0.06,0.14,t+1+i*0.22+0.14,'square');}
+}
+
+// ── Question bank ─────────────────────────────────────────────────────────────
+// Each question: { id, context, text, sub, options: [{label, value, icon, cls}], triggerAt (seconds), depends }
+const QUESTION_SETS = [
+  // Immediate onset questions — spread across first 2 minutes
+  {
+    id: 'side',
+    triggerAt: 30,
+    context: 'Right now',
+    text: 'Is the shaking happening on BOTH sides of the body?',
+    sub: 'Look at both arms and both legs.',
+    options: [
+      { label: 'Yes — both sides shaking',      value: 'both',  icon: '✓', cls: 'yes' },
+      { label: 'No — only one side or one limb', value: 'one',   icon: '!', cls: 'no'  },
+      { label: "I can't tell",                  value: 'unsure',icon: '?', cls: 'unsure' },
+    ]
+  },
+  {
+    id: 'breathing',
+    triggerAt: 60,
+    context: 'Check breathing',
+    text: 'Can you see the chest rising and falling?',
+    sub: 'Watch the chest or belly for movement.',
+    options: [
+      { label: 'Yes — chest is moving',  value: 'yes',   icon: '✓', cls: 'yes' },
+      { label: 'No — not breathing',     value: 'no',    icon: '!', cls: 'no'  },
+      { label: "I'm not sure",           value: 'unsure',icon: '?', cls: 'unsure' },
+    ]
+  },
+  {
+    id: 'lips',
+    triggerAt: 100,
+    context: 'Check colour',
+    text: 'What colour are the lips and face?',
+    sub: 'Normal skin or pink is fine. Blue or grey is serious.',
+    options: [
+      { label: 'Normal / pink colour', value: 'pink',  icon: '✓', cls: 'yes' },
+      { label: 'Blue or grey lips',    value: 'blue',  icon: '!', cls: 'no'  },
+      { label: "Hard to tell",         value: 'unsure',icon: '?', cls: 'unsure' },
+    ]
+  },
+  {
+    id: 'position',
+    triggerAt: 140,
+    context: 'Safety check',
+    text: 'Is the child lying on their side?',
+    sub: 'Gently roll them onto their side if they\'re on their back — this keeps the airway clear.',
+    options: [
+      { label: 'Yes, on their side',      value: 'yes',  icon: '✓', cls: 'yes' },
+      { label: 'No — I\'ll do it now',    value: 'no',   icon: '!', cls: 'no'  },
+      { label: 'Can\'t move them safely', value: 'cant', icon: '?', cls: 'unsure' },
+    ]
+  },
+  // 2-minute check
+  {
+    id: 'still_seizing_2',
+    triggerAt: 125,
+    context: 'At 2 minutes',
+    text: 'Is the child still seizing?',
+    sub: 'Are the shaking or stiffening movements still happening?',
+    options: [
+      { label: 'Yes — still seizing',  value: 'yes', icon: '!', cls: 'no'  },
+      { label: 'No — it has stopped',  value: 'no',  icon: '✓', cls: 'yes' },
+    ]
+  },
+  // 5-minute checks
+  {
+    id: 'fever_visible',
+    triggerAt: 300,
+    context: 'At 5 minutes',
+    text: 'Does the child feel hot to the touch?',
+    sub: 'Feel their forehead with the back of your hand.',
+    options: [
+      { label: 'Yes — very hot',    value: 'hot',   icon: '✓', cls: 'yes' },
+      { label: 'Warm but not hot',  value: 'warm',  icon: '?', cls: 'unsure' },
+      { label: 'Not hot / normal',  value: 'cool',  icon: '!', cls: 'no'  },
+    ]
+  },
+  {
+    id: 'eyes',
+    triggerAt: 360,
+    context: 'At 5–6 minutes',
+    text: 'Where are the eyes pointing?',
+    sub: '',
+    options: [
+      { label: 'Rolling or moving symmetrically', value: 'rolling', icon: '✓', cls: 'yes' },
+      { label: 'Fixed to one side only',          value: 'fixed',   icon: '!', cls: 'no'  },
+      { label: 'Eyes are closed',                 value: 'closed',  icon: '?', cls: 'unsure' },
+    ]
+  },
+  {
+    id: 'response_5',
+    triggerAt: 420,
+    context: 'At 7 minutes',
+    text: 'If you call their name, do they react at all?',
+    sub: 'Any movement, sound, or eye opening counts.',
+    options: [
+      { label: 'Yes — some reaction',  value: 'yes', icon: '✓', cls: 'yes' },
+      { label: 'No reaction at all',   value: 'no',  icon: '!', cls: 'no'  },
+      { label: 'Still unconscious',    value: 'out', icon: '!', cls: 'no'  },
+    ]
+  },
+  // 10-minute check
+  {
+    id: 'still_seizing_10',
+    triggerAt: 605,
+    context: 'At 10 minutes',
+    text: 'Is the seizure still continuing?',
+    sub: '',
+    options: [
+      { label: 'Yes — still seizing',  value: 'yes', icon: '!', cls: 'no'  },
+      { label: 'No — it stopped',      value: 'no',  icon: '✓', cls: 'yes' },
+    ]
+  },
+  // Post-seizure questions (shown when seizure reported stopped)
+  {
+    id: 'post_side',
+    triggerAt: null, // triggered manually on seizure stop
+    context: 'After the seizure',
+    text: 'Is one side of the body weaker than the other?',
+    sub: 'Try asking the child to squeeze both your hands — is one side much weaker?',
+    options: [
+      { label: 'Both sides seem equal',  value: 'equal', icon: '✓', cls: 'yes' },
+      { label: 'One side seems weaker',  value: 'weak',  icon: '!', cls: 'no'  },
+      { label: 'Can\'t check yet',       value: 'cant',  icon: '?', cls: 'unsure' },
+    ]
+  },
+  {
+    id: 'post_alert',
+    triggerAt: null,
+    context: 'After the seizure',
+    text: 'Is the child starting to wake up or respond?',
+    sub: 'It is normal to be very sleepy for several minutes after a seizure.',
+    options: [
+      { label: 'Yes — waking up slowly',     value: 'yes',   icon: '✓', cls: 'yes' },
+      { label: 'Still completely unresponsive', value: 'no', icon: '!', cls: 'no'  },
+    ]
+  },
+];
+
+// ── Session logic ─────────────────────────────────────────────────────────────
+function startSession() {
+  try { getAudio().resume(); } catch(e) {}
+  startWall = new Date();
+  running = true;
+  elapsed = 0;
+  answers = [];
+  milestonesFired = { 2: false, 15: false, 30: false };
+  queuedQuestions = [...QUESTION_SETS.filter(q => q.triggerAt !== null)];
+  sessionEnded = false;
+
+  document.getElementById('timer-strip').classList.remove('hidden');
+  document.getElementById('milestone-bar').classList.remove('hidden');
+  timerInterval = setInterval(tick, 500);
+
+  // Start with first question immediately
+  showNextQuestion();
+}
+
+function tick() {
+  elapsed = (Date.now() - startWall.getTime()) / 1000;
+  updateTimerStrip();
+  checkMilestones();
+  checkQueuedQuestions();
+}
+
+function fmt(sec) {
+  const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function updateTimerStrip() {
+  const el = document.getElementById('strip-timer');
+  const ph = document.getElementById('strip-phase');
+  const fill = document.getElementById('ms-fill');
+  el.textContent = fmt(elapsed);
+
+  const pct = Math.min((elapsed / 1800) * 100, 100);
+  fill.style.width = pct + '%';
+
+  if (elapsed < 120) {
+    el.className = 'strip-timer';
+    ph.className = 'strip-phase';
+    ph.textContent = 'Observing';
+    fill.style.background = 'var(--ok)';
+  } else if (elapsed < 900) {
+    el.className = 'strip-timer phase-warn';
+    ph.className = 'strip-phase phase-warn';
+    ph.textContent = 'Give medication';
+    fill.style.background = 'var(--warn)';
+  } else if (elapsed < 1800) {
+    el.className = 'strip-timer phase-alert';
+    ph.className = 'strip-phase phase-alert';
+    ph.textContent = 'Complex seizure';
+    fill.style.background = 'var(--alert)';
+  } else {
+    el.className = 'strip-timer phase-alert';
+    ph.className = 'strip-phase phase-alert';
+    ph.textContent = 'Status — call 112';
+    fill.style.background = 'var(--alert)';
+  }
+}
+
+function checkMilestones() {
+  if (!milestonesFired[2] && elapsed >= 120) {
+    milestonesFired[2] = true;
+    chime2();
+    document.querySelectorAll('.ms-tick')[0].classList.add('reached');
+    showBanner('⚠ 2 minutes', 'If medication is available, give it now. Keep watching the breathing.');
+    // Queue the "still seizing" question immediately
+    const q = QUESTION_SETS.find(q => q.id === 'still_seizing_2');
+    if (q && !answers.find(a => a.qid === 'still_seizing_2')) {
+      setTimeout(() => showQuestion(q), 4000);
+    }
+  }
+  if (!milestonesFired[15] && elapsed >= 900) {
+    milestonesFired[15] = true;
+    alarm3();
+    document.querySelectorAll('.ms-tick')[1].classList.add('reached');
+    showBanner('🚨 15 minutes — call emergency services now', 'This is a complex seizure. Call 112 immediately if you haven\'t already.');
+  }
+  if (!milestonesFired[30] && elapsed >= 1800) {
+    milestonesFired[30] = true;
+    alarm3();
+    document.querySelectorAll('.ms-tick')[2].classList.add('reached');
+    showBanner('🚨 30 minutes — febrile status epilepticus', 'Tell the ambulance the seizure has lasted 30 minutes. Stay on the phone with emergency services.');
+  }
+}
+
+function checkQueuedQuestions() {
+  if (currentQ) return; // already showing a question
+  if (document.getElementById('screen-question').classList.contains('active')) return;
+  const due = queuedQuestions.find(q => q.triggerAt !== null && elapsed >= q.triggerAt);
+  if (due) {
+    queuedQuestions = queuedQuestions.filter(q => q !== due);
+    showQuestion(due);
+  }
+}
+
+function showNextQuestion() {
+  const due = queuedQuestions.find(q => q.triggerAt !== null && elapsed >= q.triggerAt);
+  if (due) {
+    queuedQuestions = queuedQuestions.filter(q => q !== due);
+    showQuestion(due);
+  } else {
+    showWaiting();
+  }
+}
+
+function showQuestion(q) {
+  currentQ = q;
+  document.getElementById('q-context').textContent = q.context;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-sub').textContent = q.sub || '';
+  document.getElementById('q-sub').style.display = q.sub ? 'block' : 'none';
+
+  const opts = document.getElementById('q-options');
+  opts.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'q-btn ' + opt.cls;
+    btn.innerHTML = `<div class="q-btn-icon">${opt.icon}</div><div>${opt.label}</div>`;
+    btn.onclick = () => answerQuestion(q, opt);
+    opts.appendChild(btn);
+  });
+  showScreen('screen-question');
+}
+
+function answerQuestion(q, opt) {
+  answers.push({ qid: q.id, answer: opt.value, label: opt.label, elapsed: elapsed });
+  currentQ = null;
+
+  // Handle special logic based on answer
+  handleAnswer(q.id, opt.value);
+}
+
+function seizureStopped() {
+  // Can be called any time — from the strip button or from a question answer
+  if (sessionEnded) return;
+  sessionEnded = true;
+  clearInterval(timerInterval);
+  running = false;
+  const stopTime = elapsed;
+
+  // Hide the stopped button so it can't be tapped again
+  document.querySelector('.btn-stopped').style.display = 'none';
+
+  currentQ = null;
+  queuedQuestions = []; // cancel remaining timed questions
+
+  // Show post-seizure questions then summary
+  const postQs = QUESTION_SETS.filter(q => q.triggerAt === null);
+  let delay = 0;
+  postQs.forEach(q => {
+    setTimeout(() => showQuestion(q), delay);
+    delay += 100; // they'll be answered sequentially, this just staggers the first show
+  });
+  // After answering all post questions, summary is triggered from handleAnswer
+  // Store stopTime for summary
+  window._stopTime = stopTime;
+}
+
+function handleAnswer(qid, value) {
+  // "Still seizing" answered NO from question — same as pressing the button
+  if ((qid === 'still_seizing_2' || qid === 'still_seizing_10') && value === 'no') {
+    seizureStopped();
+    return;
+  }
+
+  // Post-seizure questions done — if this is the last one, show summary
+  const postIds = QUESTION_SETS.filter(q => q.triggerAt === null).map(q => q.id);
+  if (postIds.includes(qid)) {
+    const answeredPost = answers.filter(a => postIds.includes(a.qid));
+    if (answeredPost.length >= postIds.length) {
+      buildSummary(window._stopTime ?? elapsed);
+      return;
+    } else {
+      // Show next post question
+      const nextPost = QUESTION_SETS.find(q => q.triggerAt === null && !answers.find(a => a.qid === q.id));
+      if (nextPost) { showQuestion(nextPost); return; }
+      else { buildSummary(window._stopTime ?? elapsed); return; }
+    }
+  }
+
+  // No breathing — urgent instruction
+  if ((qid === 'breathing') && value === 'no') {
+    showBanner('🚨 Not breathing', 'Call 112 now. Place on their side. If trained, start rescue breathing.');
+  }
+
+  // Blue lips — urgent
+  if (qid === 'lips' && value === 'blue') {
+    showBanner('🚨 Blue lips', 'This is urgent. Call 112 immediately if not already done.');
+  }
+
+  // One-sided — log but continue
+  if (qid === 'side' && value === 'one') {
+    showBanner('⚠ One-sided shaking', 'Note this — tell the ambulance. Keep watching.');
+  }
+
+  // Eye fixed to one side
+  if (qid === 'eyes' && value === 'fixed') {
+    showBanner('⚠ Eyes fixed to one side', 'Note this for the ambulance crew.');
+  }
+
+  // Show next scheduled question or waiting screen
+  showNextQuestion();
+}
+
+function showWaiting() {
+  const actions = [];
+  const nextQ = queuedQuestions
+    .filter(q => q.triggerAt !== null)
+    .sort((a,b) => a.triggerAt - b.triggerAt)[0];
+
+  // Build waiting screen content based on phase
+  let emoji = '👁️', title = 'Keep watching', body = '';
+
+  if (elapsed < 120) {
+    body = 'Stay calm. Don\'t hold the child down or put anything in their mouth. Time the seizure.';
+    actions.push('Keep them on their side if possible');
+    actions.push('Clear the area of hard or sharp objects');
+    actions.push('Stay with them at all times');
+    actions.push('Call 112 if this is their first ever seizure');
+  } else if (elapsed < 900) {
+    emoji = '⚠️';
+    title = 'Medication if available';
+    body = 'If you have emergency seizure medication (prescribed by a doctor), give it now.';
+    actions.push('Keep them on their side');
+    actions.push('Watch the breathing');
+    actions.push('Stay on the phone with emergency services if called');
+  } else {
+    emoji = '🚨';
+    title = 'Emergency — call 112';
+    body = 'This seizure is lasting longer than 15 minutes. Emergency services must be on the way.';
+    actions.push('Stay on the phone with 112');
+    actions.push('Keep them on their side');
+    actions.push('Do not give food or water');
+  }
+
+  document.getElementById('w-emoji').textContent = emoji;
+  document.getElementById('w-title').textContent = title;
+  document.getElementById('w-body').textContent  = body;
+
+  const actEl = document.getElementById('w-actions');
+  actEl.innerHTML = '';
+  actions.forEach((a, i) => {
+    actEl.innerHTML += `<div class="action-item"><div class="action-num">${i+1}</div><div>${a}</div></div>`;
+  });
+
+  const nextCard = document.getElementById('next-card');
+  if (nextQ) {
+    nextCard.style.display = 'block';
+    const secsAway = Math.max(0, nextQ.triggerAt - elapsed);
+    document.getElementById('next-card-text').textContent =
+      `Next check-in in about ${Math.ceil(secsAway / 60) < 1 ? 'seconds' : Math.ceil(secsAway / 60) + ' min'}`;
+  } else {
+    nextCard.style.display = 'none';
+  }
+
+  showScreen('screen-waiting');
+}
+
+function showBanner(label, text) {
+  document.getElementById('banner-label').textContent = label;
+  document.getElementById('banner-text').textContent  = text;
+  const b = document.getElementById('alert-banner');
+  b.classList.add('visible');
+  clearTimeout(b._timeout);
+  b._timeout = setTimeout(closeBanner, 8000);
+}
+function closeBanner() {
+  document.getElementById('alert-banner').classList.remove('visible');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── Summary ───────────────────────────────────────────────────────────────────
+function buildSummary(seizureDuration) {
+  const durStr = fmt(seizureDuration);
+  document.getElementById('sum-duration').textContent = durStr;
+
+  const mins = seizureDuration / 60;
+  let durLabel = 'Total seizure duration';
+  if (mins >= 30)     durLabel = '⚠ Febrile status epilepticus (≥30 min)';
+  else if (mins >= 15) durLabel = '⚠ Complex febrile seizure (≥15 min)';
+  else if (mins >= 2)  durLabel = 'Prolonged — medication was due';
+  document.getElementById('sum-dur-label').textContent = durLabel;
+
+  // Build answer items
+  const itemMap = {
+    'side':         { yes: ['both', 'unsure'], label: a => a === 'both' ? 'Shaking on both sides of body' : a === 'one' ? 'Shaking on ONE side only — tell ambulance' : 'Side unclear', sev: a => a === 'one' ? 'alert' : 'ok' },
+    'breathing':    { label: a => a === 'yes' ? 'Was breathing during seizure' : a === 'no' ? 'NOT breathing during seizure — critical' : 'Breathing unclear', sev: a => a === 'no' ? 'alert' : a === 'unsure' ? 'warn' : 'ok' },
+    'lips':         { label: a => a === 'pink' ? 'Lips were normal / pink colour' : a === 'blue' ? 'BLUE or grey lips — oxygen concern' : 'Lip colour unclear', sev: a => a === 'blue' ? 'alert' : a === 'unsure' ? 'warn' : 'ok' },
+    'eyes':         { label: a => a === 'rolling' ? 'Eyes rolling / moving symmetrically' : a === 'fixed' ? 'Eyes fixed to ONE side — tell ambulance' : 'Eyes closed during seizure', sev: a => a === 'fixed' ? 'warn' : 'ok' },
+    'position':     { label: a => a === 'yes' ? 'Child was placed in recovery position' : a === 'no' ? 'Recovery position applied during seizure' : 'Could not safely reposition', sev: a => 'ok' },
+    'fever_visible':{ label: a => a === 'hot' ? 'Child felt very hot — likely fever' : a === 'warm' ? 'Child felt warm' : 'No obvious fever', sev: a => a === 'hot' ? 'warn' : 'ok' },
+    'post_side':    { label: a => a === 'equal' ? 'Both sides equal strength after seizure' : a === 'weak' ? 'One side WEAKER after seizure — tell ambulance' : 'Strength not assessed yet', sev: a => a === 'weak' ? 'alert' : 'ok' },
+    'post_alert':   { label: a => a === 'yes' ? 'Child starting to wake up (normal recovery)' : 'Child still unresponsive after seizure', sev: a => a === 'no' ? 'alert' : 'ok' },
+  };
+
+  const container = document.getElementById('sum-items');
+  container.innerHTML = '';
+  answers.forEach(ans => {
+    const map = itemMap[ans.qid];
+    if (!map) return;
+    const label = map.label(ans.answer);
+    const sev   = map.sev(ans.answer);
+    const time  = fmt(ans.elapsed);
+    container.innerHTML += `
+      <div class="summary-item">
+        <div class="si-dot si-${sev}"></div>
+        <div><div style="font-weight:500">${label}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">Noted at ${time}</div></div>
+      </div>`;
+  });
+
+  // Build ambulance script
+  const sideAns = answers.find(a => a.qid === 'side');
+  const feverAns = answers.find(a => a.qid === 'fever_visible');
+  const eyeAns = answers.find(a => a.qid === 'eyes');
+  const postSideAns = answers.find(a => a.qid === 'post_side');
+
+  let script = `"My child has had a seizure that lasted <strong>${durStr}</strong>. `;
+  script += feverAns?.answer === 'hot' ? 'They felt very hot — I think they have a fever. ' : '';
+  script += sideAns?.answer === 'one' ? 'The shaking was only on <strong>one side</strong> of the body. ' : '';
+  script += eyeAns?.answer === 'fixed' ? 'Their eyes were fixed to one side. ' : '';
+  script += postSideAns?.answer === 'weak' ? 'One side of their body seems weaker now. ' : '';
+  script += 'They are now in the recovery position."';
+  document.getElementById('ambulance-script').innerHTML = script;
+
+  showScreen('screen-summary');
+}
+
+function shareReport() {
+  const lines = ['SEIZURE SUMMARY', '==============='];
+  const dur = document.getElementById('sum-duration').textContent;
+  lines.push(`Duration: ${dur}`);
+  lines.push(`Started: ${startWall ? startWall.toLocaleTimeString() : 'unknown'}`);
+  lines.push('');
+  lines.push('OBSERVATIONS:');
+  answers.forEach(a => {
+    const time = fmt(a.elapsed);
+    lines.push(`[${time}] ${a.label}`);
+  });
+  lines.push('');
+  lines.push(document.getElementById('ambulance-script').innerText);
+  const text = lines.join('\n');
+  if (navigator.share) {
+    navigator.share({ title: 'Seizure Summary', text });
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = event.currentTarget;
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✓ Copied to clipboard';
+      setTimeout(() => btn.innerHTML = orig, 2000);
+    });
+  } else {
+    alert(text);
+  }
+}
+
+function restart() {
+  clearInterval(timerInterval);
+  elapsed = 0; running = false; sessionEnded = false; currentQ = null;
+  answers = []; queuedQuestions = [];
+  milestonesFired = { 2: false, 15: false, 30: false };
+  window._stopTime = null;
+  document.querySelector('.btn-stopped').style.display = '';
+  document.getElementById('timer-strip').classList.add('hidden');
+  document.getElementById('milestone-bar').classList.add('hidden');
+  document.getElementById('alert-banner').classList.remove('visible');
+  document.getElementById('strip-timer').textContent = '00:00';
+  document.getElementById('ms-fill').style.width = '0%';
+  document.querySelectorAll('.ms-tick').forEach(t => t.classList.remove('reached'));
+  showScreen('screen-start');
+}
+</script>
+</body>
+</html>
