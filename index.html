@@ -325,38 +325,6 @@
     flex-shrink: 0; margin-top: 1px;
   }
 
-  .vitals-panel {
-    margin-top: 14px;
-    padding: 14px;
-    border-radius: 14px;
-    background: var(--surface);
-    border: 1px solid var(--border2);
-  }
-  .vital-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    margin-top: 10px;
-  }
-  .vital-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-  .vital-help {
-    font-size: 13px;
-    color: var(--text2);
-    line-height: 1.45;
-    margin-bottom: 8px;
-  }
-  .vital-help ol {
-    margin-left: 18px;
-  }
-  .vital-help li {
-    margin-bottom: 4px;
-  }
   .vital-row {
     display: flex;
     gap: 8px;
@@ -388,6 +356,18 @@
     font-size: 13px;
     line-height: 1.4;
     color: var(--text2);
+  }
+  .breath-question {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 14px;
+  }
+  .breath-help {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.5;
+    margin-bottom: 10px;
   }
 
   @media (min-height: 700px) {
@@ -456,30 +436,6 @@
         <div class="next-card-text" id="next-card-text"></div>
       </div>
       <div class="action-list" id="w-actions"></div>
-
-      <div class="vitals-panel">
-        <div class="summary-section-title">Hands-on vital checks</div>
-
-        <div class="vital-card">
-          <div class="vital-title">Breathing rate</div>
-          <div class="vital-help">
-            <ol>
-              <li>Watch chest or belly movement.</li>
-              <li>Tap "Start 15s check".</li>
-              <li>Tap "+1 breath" each time you see a breath.</li>
-            </ol>
-          </div>
-          <div class="vital-row">
-            <button class="vital-btn" id="breath-count-btn" onclick="startBreathingCount()">Start 15s check</button>
-            <span class="vital-note" id="breath-countdown">Ready</span>
-          </div>
-          <div class="vital-row" style="margin-top:8px">
-            <button class="vital-btn" id="breath-tap-btn" onclick="tapBreath()" disabled>+1 breath</button>
-            <span class="vital-note" id="breath-tap-count">Count: 0</span>
-          </div>
-          <div class="vital-result" id="breath-result">No breathing check recorded yet.</div>
-        </div>
-      </div>
     </div>
 
     <!-- SUMMARY -->
@@ -577,6 +533,7 @@ function classifyBreathingRate(bpm) {
 
 function renderBreathingResult() {
   const el = document.getElementById('breath-result');
+  if (!el) return;
   if (typeof vitalChecks.breathsPerMin !== 'number') {
     el.textContent = 'No breathing check recorded yet.';
     return;
@@ -591,6 +548,7 @@ function startBreathingCount() {
   const tapBtn = document.getElementById('breath-tap-btn');
   const tapCountEl = document.getElementById('breath-tap-count');
   const countdown = document.getElementById('breath-countdown');
+  if (!btn || !tapBtn || !tapCountEl || !countdown) return;
   if (breathingTimer) return;
 
   breathTapCount = 0;
@@ -612,6 +570,7 @@ function startBreathingCount() {
       btn.textContent = 'Start again';
       countdown.textContent = 'Done';
       try { chime2(); } catch(e) {}
+      completeBreathingQuestion();
       return;
     }
     countdown.textContent = `${breathingSecondsLeft}s left`;
@@ -621,7 +580,20 @@ function startBreathingCount() {
 function tapBreath() {
   if (!breathingTimer) return;
   breathTapCount += 1;
-  document.getElementById('breath-tap-count').textContent = `Count: ${breathTapCount}`;
+  const el = document.getElementById('breath-tap-count');
+  if (el) el.textContent = `Count: ${breathTapCount}`;
+}
+
+function completeBreathingQuestion() {
+  if (!currentQ || currentQ.id !== 'breathing_rate') return;
+  const bpm = vitalChecks.breathsPerMin ?? 0;
+  let value = 'normal';
+  if (bpm <= 0) value = 'none';
+  else if (bpm < 20) value = 'slow';
+  else if (bpm > 40) value = 'fast';
+  const opt = { value, label: `Breathing check (15s tap): ~${bpm}/min` };
+  const q = currentQ;
+  setTimeout(() => answerQuestion(q, opt), 250);
 }
 
 // ── Question bank ─────────────────────────────────────────────────────────────
@@ -641,16 +613,13 @@ const QUESTION_SETS = [
     ]
   },
   {
-    id: 'breathing',
+    id: 'breathing_rate',
     triggerAt: 60,
-    context: 'Check breathing',
-    text: 'Can you see the chest rising and falling?',
-    sub: 'Watch the chest or belly for movement.',
-    options: [
-      { label: 'Yes — chest is moving',  value: 'yes',   icon: '✓', cls: 'yes' },
-      { label: 'No — not breathing',     value: 'no',    icon: '!', cls: 'no'  },
-      { label: "I'm not sure",           value: 'unsure',icon: '?', cls: 'unsure' },
-    ]
+    type: 'breath_counter',
+    context: 'Breathing check',
+    text: 'Count breaths for 15 seconds',
+    sub: 'Tap +1 breath each time the chest or belly rises.',
+    options: []
   },
   {
     id: 'lips',
@@ -784,10 +753,6 @@ function startSession() {
     breathingSeverity: null,
     recordedAt: null
   };
-  document.getElementById('breath-count-btn').textContent = 'Start 15s check';
-  document.getElementById('breath-countdown').textContent = 'Ready';
-  document.getElementById('breath-tap-btn').disabled = true;
-  document.getElementById('breath-tap-count').textContent = 'Count: 0';
   renderBreathingResult();
 
   document.getElementById('timer-strip').classList.remove('hidden');
@@ -889,6 +854,9 @@ function showNextQuestion() {
 }
 
 function showQuestion(q) {
+  clearInterval(breathingTimer);
+  breathingTimer = null;
+  breathTapCount = 0;
   currentQ = q;
   document.getElementById('q-context').textContent = q.context;
   document.getElementById('q-text').textContent = q.text;
@@ -897,6 +865,23 @@ function showQuestion(q) {
 
   const opts = document.getElementById('q-options');
   opts.innerHTML = '';
+  if (q.type === 'breath_counter') {
+    opts.innerHTML = `
+      <div class="breath-question">
+        <div class="breath-help">Tap start, then tap +1 for each breath you see.</div>
+        <div class="vital-row">
+          <button class="vital-btn" id="breath-count-btn" onclick="startBreathingCount()">Start 15s check</button>
+          <span class="vital-note" id="breath-countdown">Ready</span>
+        </div>
+        <div class="vital-row" style="margin-top:8px">
+          <button class="vital-btn" id="breath-tap-btn" onclick="tapBreath()" disabled>+1 breath</button>
+          <span class="vital-note" id="breath-tap-count">Count: 0</span>
+        </div>
+        <div class="vital-result" id="breath-result">No breathing check recorded yet.</div>
+      </div>`;
+    showScreen('screen-question');
+    return;
+  }
   q.options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'q-btn ' + opt.cls;
@@ -920,6 +905,8 @@ function seizureStopped() {
   if (sessionEnded) return;
   sessionEnded = true;
   clearInterval(timerInterval);
+  clearInterval(breathingTimer);
+  breathingTimer = null;
   running = false;
   const stopTime = elapsed;
 
@@ -963,9 +950,11 @@ function handleAnswer(qid, value) {
     }
   }
 
-  // No breathing — urgent instruction
-  if ((qid === 'breathing') && value === 'no') {
-    showBanner('🚨 Not breathing', 'Call 112 now. Place on their side. If trained, start rescue breathing.');
+  if (qid === 'breathing_rate' && value === 'none') {
+    showBanner('🚨 Not breathing', 'No breaths seen. Call 112 now and start rescue breathing if trained.');
+  }
+  if (qid === 'breathing_rate' && (value === 'slow' || value === 'fast')) {
+    showBanner('⚠ Breathing concern', 'Breathing rate was outside usual range. Keep close watch and update emergency services.');
   }
 
   // Blue lips — urgent
@@ -1073,7 +1062,7 @@ function buildSummary(seizureDuration) {
   // Build answer items
   const itemMap = {
     'side':         { yes: ['both', 'unsure'], label: a => a === 'both' ? 'Shaking on both sides of body' : a === 'one' ? 'Shaking on ONE side only — tell ambulance' : 'Side unclear', sev: a => a === 'one' ? 'alert' : 'ok' },
-    'breathing':    { label: a => a === 'yes' ? 'Was breathing during seizure' : a === 'no' ? 'NOT breathing during seizure — critical' : 'Breathing unclear', sev: a => a === 'no' ? 'alert' : a === 'unsure' ? 'warn' : 'ok' },
+    'breathing_rate': { label: a => a === 'none' ? 'No breaths seen during 15-second check' : a === 'slow' ? `Breathing slow (~${vitalChecks.breathsPerMin}/min)` : a === 'fast' ? `Breathing fast (~${vitalChecks.breathsPerMin}/min)` : `Breathing rate ~${vitalChecks.breathsPerMin}/min`, sev: a => a === 'none' ? 'alert' : (a === 'slow' || a === 'fast') ? 'warn' : 'ok' },
     'lips':         { label: a => a === 'pink' ? 'Lips were normal / pink colour' : a === 'blue' ? 'BLUE or grey lips — oxygen concern' : 'Lip colour unclear', sev: a => a === 'blue' ? 'alert' : a === 'unsure' ? 'warn' : 'ok' },
     'eyes':         { label: a => a === 'rolling' ? 'Eyes rolling / moving symmetrically' : a === 'fixed' ? 'Eyes fixed to ONE side — tell ambulance' : 'Eyes closed during seizure', sev: a => a === 'fixed' ? 'warn' : 'ok' },
     'position':     { label: a => a === 'yes' ? 'Child was placed in recovery position' : a === 'no' ? 'Recovery position applied during seizure' : 'Could not safely reposition', sev: a => 'ok' },
@@ -1096,15 +1085,6 @@ function buildSummary(seizureDuration) {
         <div><div style="font-weight:500">${label}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">Noted at ${time}</div></div>
       </div>`;
   });
-
-  if (typeof vitalChecks.breathsPerMin === 'number') {
-    const sev = vitalChecks.breathingSeverity || 'info';
-    container.innerHTML += `
-      <div class="summary-item">
-        <div class="si-dot si-${sev}"></div>
-        <div><div style="font-weight:500">Breathing rate: ${vitalChecks.breathsPerMin}/min</div><div style="font-size:12px;color:var(--text3);margin-top:2px">Tap count over 15 seconds</div></div>
-      </div>`;
-  }
 
   // Build ambulance script
   const sideAns = answers.find(a => a.qid === 'side');
@@ -1177,10 +1157,6 @@ function restart() {
   document.getElementById('strip-timer').textContent = '00:00';
   document.getElementById('ms-fill').style.width = '0%';
   document.querySelectorAll('.ms-tick').forEach(t => t.classList.remove('reached'));
-  document.getElementById('breath-count-btn').textContent = 'Start 15s check';
-  document.getElementById('breath-countdown').textContent = 'Ready';
-  document.getElementById('breath-tap-btn').disabled = true;
-  document.getElementById('breath-tap-count').textContent = 'Count: 0';
   renderBreathingResult();
   showScreen('screen-start');
 }
