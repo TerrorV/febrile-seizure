@@ -369,6 +369,23 @@
     line-height: 1.5;
     margin-bottom: 10px;
   }
+  .breath-main-btn {
+    width: 100%;
+    min-height: 132px;
+    border-radius: 18px;
+    border: 2px solid rgba(96,165,250,0.5);
+    background: linear-gradient(180deg, rgba(96,165,250,0.2), rgba(96,165,250,0.08));
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .breath-main-btn:active {
+    transform: scale(0.98);
+  }
 
   @media (min-height: 700px) {
     .q-text { font-size: 26px; }
@@ -483,9 +500,11 @@ let queuedQuestions = [];
 let currentQ = null;
 let waitingActions = [];
 let breathingTimer = null;
+let breathingInactivityTimer = null;
 let breathingSecondsLeft = 15;
 const BREATH_WINDOW_SECONDS = 15;
 let breathTapCount = 0;
+let breathingStarted = false;
 let vitalChecks = {
   breathCountWindow: null,
   breathWindowSeconds: BREATH_WINDOW_SECONDS,
@@ -543,49 +562,64 @@ function renderBreathingResult() {
   el.textContent = result.text;
 }
 
-function startBreathingCount() {
-  const btn = document.getElementById('breath-count-btn');
-  const tapBtn = document.getElementById('breath-tap-btn');
-  const tapCountEl = document.getElementById('breath-tap-count');
-  const countdown = document.getElementById('breath-countdown');
-  if (!btn || !tapBtn || !tapCountEl || !countdown) return;
-  if (breathingTimer) return;
+function clearBreathingTimers() {
+  clearInterval(breathingTimer);
+  clearTimeout(breathingInactivityTimer);
+  breathingTimer = null;
+  breathingInactivityTimer = null;
+}
 
-  breathTapCount = 0;
-  breathingSecondsLeft = BREATH_WINDOW_SECONDS;
-  tapCountEl.textContent = 'Count: 0';
-  tapBtn.disabled = false;
-  btn.textContent = 'Counting...';
-  countdown.textContent = `${BREATH_WINDOW_SECONDS}s left`;
-  breathingTimer = setInterval(() => {
-    breathingSecondsLeft -= 1;
-    if (breathingSecondsLeft <= 0) {
-      clearInterval(breathingTimer);
-      breathingTimer = null;
-      tapBtn.disabled = true;
+function armBreathingInactivityTimer() {
+  clearTimeout(breathingInactivityTimer);
+  breathingInactivityTimer = setTimeout(() => {
+    if (!currentQ || currentQ.id !== 'breathing_rate') return;
+    if (!breathingStarted) {
+      vitalChecks.breathCountWindow = 0;
+      vitalChecks.breathsPerMin = 0;
+    } else if (typeof vitalChecks.breathsPerMin !== 'number') {
       vitalChecks.breathCountWindow = breathTapCount;
       vitalChecks.breathsPerMin = Math.round((breathTapCount * 60) / BREATH_WINDOW_SECONDS);
-      updateVitalsTimestamp();
-      renderBreathingResult();
-      btn.textContent = 'Start again';
-      countdown.textContent = 'Done';
-      try { chime2(); } catch(e) {}
-      completeBreathingQuestion();
-      return;
     }
-    countdown.textContent = `${breathingSecondsLeft}s left`;
-  }, 1000);
+    updateVitalsTimestamp();
+    completeBreathingQuestion();
+  }, BREATH_WINDOW_SECONDS * 1000);
 }
 
 function tapBreath() {
-  if (!breathingTimer) return;
+  if (!currentQ || currentQ.id !== 'breathing_rate') return;
+  const countdown = document.getElementById('breath-countdown');
+  const countEl = document.getElementById('breath-tap-count');
+  const btn = document.getElementById('breath-main-btn');
+  if (!countdown || !countEl || !btn) return;
+
+  if (!breathingStarted) {
+    breathingStarted = true;
+    breathingSecondsLeft = BREATH_WINDOW_SECONDS;
+    btn.textContent = '+1 breath';
+    countdown.textContent = `${BREATH_WINDOW_SECONDS}s left`;
+    breathingTimer = setInterval(() => {
+      breathingSecondsLeft -= 1;
+      if (breathingSecondsLeft <= 0) {
+        clearBreathingTimers();
+        vitalChecks.breathCountWindow = breathTapCount;
+        vitalChecks.breathsPerMin = Math.round((breathTapCount * 60) / BREATH_WINDOW_SECONDS);
+        updateVitalsTimestamp();
+        try { chime2(); } catch(e) {}
+        completeBreathingQuestion();
+        return;
+      }
+      countdown.textContent = `${breathingSecondsLeft}s left`;
+    }, 1000);
+  }
+
   breathTapCount += 1;
-  const el = document.getElementById('breath-tap-count');
-  if (el) el.textContent = `Count: ${breathTapCount}`;
+  countEl.textContent = `Count: ${breathTapCount}`;
+  armBreathingInactivityTimer();
 }
 
 function completeBreathingQuestion() {
   if (!currentQ || currentQ.id !== 'breathing_rate') return;
+  clearBreathingTimers();
   const bpm = vitalChecks.breathsPerMin ?? 0;
   let value = 'normal';
   if (bpm <= 0) value = 'none';
@@ -742,10 +776,10 @@ function startSession() {
   milestonesFired = { 2: false, 15: false, 30: false };
   queuedQuestions = [...QUESTION_SETS.filter(q => q.triggerAt !== null)];
   sessionEnded = false;
-  clearInterval(breathingTimer);
-  breathingTimer = null;
+  clearBreathingTimers();
   breathingSecondsLeft = BREATH_WINDOW_SECONDS;
   breathTapCount = 0;
+  breathingStarted = false;
   vitalChecks = {
     breathCountWindow: null,
     breathWindowSeconds: BREATH_WINDOW_SECONDS,
@@ -854,9 +888,9 @@ function showNextQuestion() {
 }
 
 function showQuestion(q) {
-  clearInterval(breathingTimer);
-  breathingTimer = null;
+  clearBreathingTimers();
   breathTapCount = 0;
+  breathingStarted = false;
   currentQ = q;
   document.getElementById('q-context').textContent = q.context;
   document.getElementById('q-text').textContent = q.text;
@@ -868,17 +902,15 @@ function showQuestion(q) {
   if (q.type === 'breath_counter') {
     opts.innerHTML = `
       <div class="breath-question">
-        <div class="breath-help">Tap start, then tap +1 for each breath you see.</div>
+        <div class="breath-help">Tap the big button for each breath. First tap starts the 15-second timer.</div>
+        <button class="breath-main-btn" id="breath-main-btn" onclick="tapBreath()">Tap For Each Breath</button>
         <div class="vital-row">
-          <button class="vital-btn" id="breath-count-btn" onclick="startBreathingCount()">Start 15s check</button>
-          <span class="vital-note" id="breath-countdown">Ready</span>
-        </div>
-        <div class="vital-row" style="margin-top:8px">
-          <button class="vital-btn" id="breath-tap-btn" onclick="tapBreath()" disabled>+1 breath</button>
+          <span class="vital-note" id="breath-countdown">Waiting for first tap</span>
           <span class="vital-note" id="breath-tap-count">Count: 0</span>
         </div>
         <div class="vital-result" id="breath-result">No breathing check recorded yet.</div>
       </div>`;
+    armBreathingInactivityTimer();
     showScreen('screen-question');
     return;
   }
@@ -905,8 +937,7 @@ function seizureStopped() {
   if (sessionEnded) return;
   sessionEnded = true;
   clearInterval(timerInterval);
-  clearInterval(breathingTimer);
-  breathingTimer = null;
+  clearBreathingTimers();
   running = false;
   const stopTime = elapsed;
 
@@ -1135,13 +1166,13 @@ function shareReport() {
 
 function restart() {
   clearInterval(timerInterval);
-  clearInterval(breathingTimer);
+  clearBreathingTimers();
   elapsed = 0; running = false; sessionEnded = false; currentQ = null;
   answers = []; queuedQuestions = [];
   milestonesFired = { 2: false, 15: false, 30: false };
-  breathingTimer = null;
   breathingSecondsLeft = BREATH_WINDOW_SECONDS;
   breathTapCount = 0;
+  breathingStarted = false;
   vitalChecks = {
     breathCountWindow: null,
     breathWindowSeconds: BREATH_WINDOW_SECONDS,
