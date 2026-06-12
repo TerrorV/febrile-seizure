@@ -667,18 +667,6 @@ const QUESTION_SETS = [
       { label: "Hard to tell",         value: 'unsure',icon: '?', cls: 'unsure' },
     ]
   },
-  {
-    id: 'position',
-    triggerAt: 140,
-    context: 'Safety check',
-    text: 'Is the child lying on their side?',
-    sub: 'Gently roll them onto their side if they\'re on their back — this keeps the airway clear.',
-    options: [
-      { label: 'Yes, on their side',      value: 'yes',  icon: '✓', cls: 'yes' },
-      { label: 'No — I\'ll do it now',    value: 'no',   icon: '!', cls: 'no'  },
-      { label: 'Can\'t move them safely', value: 'cant', icon: '?', cls: 'unsure' },
-    ]
-  },
   // 2-minute check
   {
     id: 'still_seizing_2',
@@ -705,27 +693,51 @@ const QUESTION_SETS = [
     ]
   },
   {
-    id: 'eyes',
+    id: 'breathing_effort',
     triggerAt: 360,
-    context: 'At 5–6 minutes',
-    text: 'Where are the eyes pointing?',
-    sub: '',
+    context: 'At 6 minutes',
+    text: 'How does the breathing look right now?',
+    sub: 'Look for chest pulling in, noisy breaths, gasping, or long pauses.',
     options: [
-      { label: 'Rolling or moving symmetrically', value: 'rolling', icon: '✓', cls: 'yes' },
-      { label: 'Fixed to one side only',          value: 'fixed',   icon: '!', cls: 'no'  },
-      { label: 'Eyes are closed',                 value: 'closed',  icon: '?', cls: 'unsure' },
+      { label: 'Easy and steady',       value: 'easy',   icon: '✓', cls: 'yes' },
+      { label: 'Hard work or noisy',    value: 'hard',   icon: '!', cls: 'no'  },
+      { label: 'No breaths or long pauses', value: 'absent', icon: '!', cls: 'no'  },
     ]
   },
   {
-    id: 'response_5',
+    id: 'responsiveness',
     triggerAt: 420,
     context: 'At 7 minutes',
-    text: 'If you call their name, do they react at all?',
+    text: 'Do they react to your voice or gentle touch at all?',
     sub: 'Any movement, sound, or eye opening counts.',
     options: [
-      { label: 'Yes — some reaction',  value: 'yes', icon: '✓', cls: 'yes' },
-      { label: 'No reaction at all',   value: 'no',  icon: '!', cls: 'no'  },
-      { label: 'Still unconscious',    value: 'out', icon: '!', cls: 'no'  },
+      { label: 'Yes — some reaction', value: 'yes', icon: '✓', cls: 'yes' },
+      { label: 'No reaction',          value: 'no',  icon: '!', cls: 'no'  },
+      { label: 'Hard to tell',         value: 'unsure', icon: '?', cls: 'unsure' },
+    ]
+  },
+  {
+    id: 'tone',
+    triggerAt: 480,
+    context: 'At 8 minutes',
+    text: 'Does the body feel floppy or stiff?',
+    sub: 'Use a gentle touch only. Do not hold them down.',
+    options: [
+      { label: 'Mostly floppy', value: 'floppy', icon: '?', cls: 'unsure' },
+      { label: 'Mostly stiff',  value: 'stiff',  icon: '!', cls: 'no'  },
+      { label: 'Mixed or unsure', value: 'mixed', icon: '?', cls: 'unsure' },
+    ]
+  },
+  {
+    id: 'hands_feet',
+    triggerAt: 540,
+    context: 'At 9 minutes',
+    text: 'Do the hands and feet feel warm or cold?',
+    sub: 'A quick touch is enough.',
+    options: [
+      { label: 'Warm',            value: 'warm',  icon: '✓', cls: 'yes' },
+      { label: 'Cool or cold',    value: 'cold',  icon: '?', cls: 'unsure' },
+      { label: 'Very cold / clammy', value: 'clammy', icon: '!', cls: 'no'  },
     ]
   },
   // 10-minute check
@@ -847,11 +859,6 @@ function checkMilestones() {
     chime2();
     document.querySelectorAll('.ms-tick')[0].classList.add('reached');
     showBanner('⚠ 2 minutes', 'If medication is available, give it now. Keep watching the breathing.');
-    // Queue the "still seizing" question immediately
-    const q = QUESTION_SETS.find(q => q.id === 'still_seizing_2');
-    if (q && !answers.find(a => a.qid === 'still_seizing_2')) {
-      setTimeout(() => showQuestion(q), 4000);
-    }
   }
   if (!milestonesFired[15] && elapsed >= 900) {
     milestonesFired[15] = true;
@@ -998,9 +1005,16 @@ function handleAnswer(qid, value) {
     showBanner('⚠ One-sided shaking', 'Note this — tell the ambulance. Keep watching.');
   }
 
-  // Eye fixed to one side
-  if (qid === 'eyes' && value === 'fixed') {
-    showBanner('⚠ Eyes fixed to one side', 'Note this for the ambulance crew.');
+  if (qid === 'breathing_effort' && value === 'absent') {
+    showBanner('🚨 Breathing emergency', 'No breaths or long pauses seen. Call 112 now and start rescue breathing if trained.');
+  }
+
+  if (qid === 'breathing_effort' && value === 'hard') {
+    showBanner('⚠ Breathing concern', 'Breathing looks hard work or noisy. Keep watching closely and update emergency services.');
+  }
+
+  if (qid === 'responsiveness' && value === 'no') {
+    showBanner('⚠ No response', 'No reaction to voice or touch. Keep timing the seizure and update emergency services.');
   }
 
   // Show next scheduled question or waiting screen
@@ -1095,9 +1109,11 @@ function buildSummary(seizureDuration) {
     'side':         { yes: ['both', 'unsure'], label: a => a === 'both' ? 'Shaking on both sides of body' : a === 'one' ? 'Shaking on ONE side only — tell ambulance' : 'Side unclear', sev: a => a === 'one' ? 'alert' : 'ok' },
     'breathing_rate': { label: a => a === 'none' ? 'No breaths seen during 15-second check' : a === 'slow' ? `Breathing slow (~${vitalChecks.breathsPerMin}/min)` : a === 'fast' ? `Breathing fast (~${vitalChecks.breathsPerMin}/min)` : `Breathing rate ~${vitalChecks.breathsPerMin}/min`, sev: a => a === 'none' ? 'alert' : (a === 'slow' || a === 'fast') ? 'warn' : 'ok' },
     'lips':         { label: a => a === 'pink' ? 'Lips were normal / pink colour' : a === 'blue' ? 'BLUE or grey lips — oxygen concern' : 'Lip colour unclear', sev: a => a === 'blue' ? 'alert' : a === 'unsure' ? 'warn' : 'ok' },
-    'eyes':         { label: a => a === 'rolling' ? 'Eyes rolling / moving symmetrically' : a === 'fixed' ? 'Eyes fixed to ONE side — tell ambulance' : 'Eyes closed during seizure', sev: a => a === 'fixed' ? 'warn' : 'ok' },
-    'position':     { label: a => a === 'yes' ? 'Child was placed in recovery position' : a === 'no' ? 'Recovery position applied during seizure' : 'Could not safely reposition', sev: a => 'ok' },
     'fever_visible':{ label: a => a === 'hot' ? 'Child felt very hot — likely fever' : a === 'warm' ? 'Child felt warm' : 'No obvious fever', sev: a => a === 'hot' ? 'warn' : 'ok' },
+    'breathing_effort': { label: a => a === 'easy' ? 'Breathing looked easy and steady' : a === 'hard' ? 'Breathing looked hard work or noisy' : 'No breaths or long pauses seen', sev: a => a === 'easy' ? 'ok' : a === 'hard' ? 'warn' : 'alert' },
+    'responsiveness': { label: a => a === 'yes' ? 'Some reaction to voice or touch' : a === 'no' ? 'No reaction to voice or touch' : 'Responsiveness unclear', sev: a => a === 'no' ? 'warn' : a === 'unsure' ? 'warn' : 'ok' },
+    'tone':         { label: a => a === 'floppy' ? 'Body felt mostly floppy' : a === 'stiff' ? 'Body felt mostly stiff' : 'Body tone mixed or unclear', sev: a => a === 'stiff' ? 'warn' : 'ok' },
+    'hands_feet':   { label: a => a === 'warm' ? 'Hands and feet felt warm' : a === 'cold' ? 'Hands and feet felt cool or cold' : 'Hands and feet felt very cold or clammy', sev: a => a === 'warm' ? 'ok' : 'warn' },
     'post_side':    { label: a => a === 'equal' ? 'Both sides equal strength after seizure' : a === 'weak' ? 'One side WEAKER after seizure — tell ambulance' : 'Strength not assessed yet', sev: a => a === 'weak' ? 'alert' : 'ok' },
     'post_alert':   { label: a => a === 'yes' ? 'Child starting to wake up (normal recovery)' : 'Child still unresponsive after seizure', sev: a => a === 'no' ? 'alert' : 'ok' },
   };
@@ -1120,13 +1136,16 @@ function buildSummary(seizureDuration) {
   // Build ambulance script
   const sideAns = answers.find(a => a.qid === 'side');
   const feverAns = answers.find(a => a.qid === 'fever_visible');
-  const eyeAns = answers.find(a => a.qid === 'eyes');
+  const breathingEffortAns = answers.find(a => a.qid === 'breathing_effort');
+  const responsivenessAns = answers.find(a => a.qid === 'responsiveness');
   const postSideAns = answers.find(a => a.qid === 'post_side');
 
   let script = `"My child has had a seizure that lasted <strong>${durStr}</strong>. `;
   script += feverAns?.answer === 'hot' ? 'They felt very hot — I think they have a fever. ' : '';
   script += sideAns?.answer === 'one' ? 'The shaking was only on <strong>one side</strong> of the body. ' : '';
-  script += eyeAns?.answer === 'fixed' ? 'Their eyes were fixed to one side. ' : '';
+  script += breathingEffortAns?.answer === 'hard' ? 'Their breathing looked hard work or noisy. ' : '';
+  script += breathingEffortAns?.answer === 'absent' ? 'There were no breaths or there were long pauses in breathing. ' : '';
+  script += responsivenessAns?.answer === 'no' ? 'They did not react to voice or gentle touch. ' : '';
   script += postSideAns?.answer === 'weak' ? 'One side of their body seems weaker now. ' : '';
   if (typeof vitalChecks.breathsPerMin === 'number') script += `Breathing rate check was about ${vitalChecks.breathsPerMin} per minute. `;
   script += 'They are now in the recovery position."';
