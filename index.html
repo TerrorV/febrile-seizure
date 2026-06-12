@@ -378,16 +378,6 @@
     border-color: rgba(96,165,250,0.6);
     background: var(--info-bg);
   }
-  .vital-input {
-    width: 96px;
-    padding: 8px 10px;
-    border-radius: 10px;
-    border: 1px solid var(--border2);
-    background: #111521;
-    color: var(--text);
-    font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
-  }
   .vital-note {
     font-size: 12px;
     color: var(--text3);
@@ -475,34 +465,19 @@
           <div class="vital-help">
             <ol>
               <li>Watch chest or belly movement.</li>
-              <li>Count breaths for 30 seconds.</li>
-              <li>Enter the 30-second count below.</li>
+              <li>Tap "Start 15s check".</li>
+              <li>Tap "+1 breath" each time you see a breath.</li>
             </ol>
           </div>
           <div class="vital-row">
-            <button class="vital-btn" id="breath-count-btn" onclick="startBreathingCount()">Start 30s timer</button>
+            <button class="vital-btn" id="breath-count-btn" onclick="startBreathingCount()">Start 15s check</button>
             <span class="vital-note" id="breath-countdown">Ready</span>
           </div>
           <div class="vital-row" style="margin-top:8px">
-            <input id="breath-count-input" class="vital-input" type="number" min="0" max="60" placeholder="Breaths / 30s" />
-            <span class="vital-note">Rate = count × 2</span>
+            <button class="vital-btn" id="breath-tap-btn" onclick="tapBreath()" disabled>+1 breath</button>
+            <span class="vital-note" id="breath-tap-count">Count: 0</span>
           </div>
-          <div class="vital-result" id="breath-result">No breathing rate recorded yet.</div>
-        </div>
-
-        <div class="vital-card">
-          <div class="vital-title">Body temperature</div>
-          <div class="vital-help">Use a thermometer if available. If not, pick the touch-based option.</div>
-          <div class="vital-row">
-            <input id="temp-input" class="vital-input" type="number" min="30" max="43" step="0.1" placeholder="Temp °C" />
-            <span class="vital-note">Fever is usually 38.0°C or higher</span>
-          </div>
-          <div class="vital-row" style="margin-top:8px">
-            <button class="vital-btn temp-touch" data-touch="hot">Feels very hot</button>
-            <button class="vital-btn temp-touch" data-touch="warm">Feels warm</button>
-            <button class="vital-btn temp-touch" data-touch="normal">Feels normal/cool</button>
-          </div>
-          <div class="vital-result" id="temp-result">No temperature recorded yet.</div>
+          <div class="vital-result" id="breath-result">No breathing check recorded yet.</div>
         </div>
       </div>
     </div>
@@ -552,14 +527,14 @@ let queuedQuestions = [];
 let currentQ = null;
 let waitingActions = [];
 let breathingTimer = null;
-let breathingSecondsLeft = 30;
+let breathingSecondsLeft = 15;
+const BREATH_WINDOW_SECONDS = 15;
+let breathTapCount = 0;
 let vitalChecks = {
-  breathCount30: null,
+  breathCountWindow: null,
+  breathWindowSeconds: BREATH_WINDOW_SECONDS,
   breathsPerMin: null,
   breathingSeverity: null,
-  tempC: null,
-  tempTouch: null,
-  tempSeverity: null,
   recordedAt: null
 };
 
@@ -600,34 +575,10 @@ function classifyBreathingRate(bpm) {
   return { sev: 'ok', text: `Breathing rate recorded at ${bpm}/min.` };
 }
 
-function classifyTemperature() {
-  if (typeof vitalChecks.tempC === 'number') {
-    if (vitalChecks.tempC >= 40.0) {
-      return { sev: 'alert', text: `Very high temperature ${vitalChecks.tempC.toFixed(1)}°C. Seek urgent medical help.` };
-    }
-    if (vitalChecks.tempC >= 38.0) {
-      return { sev: 'warn', text: `Fever recorded: ${vitalChecks.tempC.toFixed(1)}°C.` };
-    }
-    return { sev: 'ok', text: `Temperature recorded: ${vitalChecks.tempC.toFixed(1)}°C.` };
-  }
-
-  if (vitalChecks.tempTouch === 'hot') {
-    return { sev: 'warn', text: 'Touch check: child feels very hot (likely fever).' };
-  }
-  if (vitalChecks.tempTouch === 'warm') {
-    return { sev: 'warn', text: 'Touch check: child feels warm.' };
-  }
-  if (vitalChecks.tempTouch === 'normal') {
-    return { sev: 'ok', text: 'Touch check: child feels normal/cool.' };
-  }
-
-  return { sev: null, text: 'No temperature recorded yet.' };
-}
-
 function renderBreathingResult() {
   const el = document.getElementById('breath-result');
   if (typeof vitalChecks.breathsPerMin !== 'number') {
-    el.textContent = 'No breathing rate recorded yet.';
+    el.textContent = 'No breathing check recorded yet.';
     return;
   }
   const result = classifyBreathingRate(vitalChecks.breathsPerMin);
@@ -635,66 +586,31 @@ function renderBreathingResult() {
   el.textContent = result.text;
 }
 
-function renderTemperatureResult() {
-  const el = document.getElementById('temp-result');
-  const result = classifyTemperature();
-  vitalChecks.tempSeverity = result.sev;
-  el.textContent = result.text;
-}
-
-function handleBreathInput() {
-  const input = document.getElementById('breath-count-input');
-  const count = parseInt(input.value, 10);
-  if (Number.isNaN(count)) {
-    vitalChecks.breathCount30 = null;
-    vitalChecks.breathsPerMin = null;
-    vitalChecks.breathingSeverity = null;
-    renderBreathingResult();
-    return;
-  }
-  vitalChecks.breathCount30 = count;
-  vitalChecks.breathsPerMin = count * 2;
-  updateVitalsTimestamp();
-  renderBreathingResult();
-}
-
-function handleTempInput() {
-  const input = document.getElementById('temp-input');
-  const temp = parseFloat(input.value);
-  if (Number.isNaN(temp)) {
-    vitalChecks.tempC = null;
-    renderTemperatureResult();
-    return;
-  }
-  vitalChecks.tempC = temp;
-  updateVitalsTimestamp();
-  renderTemperatureResult();
-}
-
-function setTouchTemp(value) {
-  vitalChecks.tempTouch = value;
-  updateVitalsTimestamp();
-  document.querySelectorAll('.temp-touch').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.touch === value);
-  });
-  renderTemperatureResult();
-}
-
 function startBreathingCount() {
   const btn = document.getElementById('breath-count-btn');
+  const tapBtn = document.getElementById('breath-tap-btn');
+  const tapCountEl = document.getElementById('breath-tap-count');
   const countdown = document.getElementById('breath-countdown');
   if (breathingTimer) return;
 
-  breathingSecondsLeft = 30;
+  breathTapCount = 0;
+  breathingSecondsLeft = BREATH_WINDOW_SECONDS;
+  tapCountEl.textContent = 'Count: 0';
+  tapBtn.disabled = false;
   btn.textContent = 'Counting...';
-  countdown.textContent = '30s left';
+  countdown.textContent = `${BREATH_WINDOW_SECONDS}s left`;
   breathingTimer = setInterval(() => {
     breathingSecondsLeft -= 1;
     if (breathingSecondsLeft <= 0) {
       clearInterval(breathingTimer);
       breathingTimer = null;
-      btn.textContent = 'Start 30s timer';
-      countdown.textContent = 'Done. Enter the breath count.';
+      tapBtn.disabled = true;
+      vitalChecks.breathCountWindow = breathTapCount;
+      vitalChecks.breathsPerMin = Math.round((breathTapCount * 60) / BREATH_WINDOW_SECONDS);
+      updateVitalsTimestamp();
+      renderBreathingResult();
+      btn.textContent = 'Start again';
+      countdown.textContent = 'Done';
       try { chime2(); } catch(e) {}
       return;
     }
@@ -702,16 +618,10 @@ function startBreathingCount() {
   }, 1000);
 }
 
-function initVitalsUI() {
-  const breathInput = document.getElementById('breath-count-input');
-  const tempInput = document.getElementById('temp-input');
-  if (breathInput) breathInput.addEventListener('input', handleBreathInput);
-  if (tempInput) tempInput.addEventListener('input', handleTempInput);
-  document.querySelectorAll('.temp-touch').forEach(btn => {
-    btn.addEventListener('click', () => setTouchTemp(btn.dataset.touch));
-  });
-  renderBreathingResult();
-  renderTemperatureResult();
+function tapBreath() {
+  if (!breathingTimer) return;
+  breathTapCount += 1;
+  document.getElementById('breath-tap-count').textContent = `Count: ${breathTapCount}`;
 }
 
 // ── Question bank ─────────────────────────────────────────────────────────────
@@ -865,23 +775,20 @@ function startSession() {
   sessionEnded = false;
   clearInterval(breathingTimer);
   breathingTimer = null;
-  breathingSecondsLeft = 30;
+  breathingSecondsLeft = BREATH_WINDOW_SECONDS;
+  breathTapCount = 0;
   vitalChecks = {
-    breathCount30: null,
+    breathCountWindow: null,
+    breathWindowSeconds: BREATH_WINDOW_SECONDS,
     breathsPerMin: null,
     breathingSeverity: null,
-    tempC: null,
-    tempTouch: null,
-    tempSeverity: null,
     recordedAt: null
   };
-  document.getElementById('breath-count-input').value = '';
-  document.getElementById('temp-input').value = '';
-  document.getElementById('breath-count-btn').textContent = 'Start 30s timer';
+  document.getElementById('breath-count-btn').textContent = 'Start 15s check';
   document.getElementById('breath-countdown').textContent = 'Ready';
-  document.querySelectorAll('.temp-touch').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('breath-tap-btn').disabled = true;
+  document.getElementById('breath-tap-count').textContent = 'Count: 0';
   renderBreathingResult();
-  renderTemperatureResult();
 
   document.getElementById('timer-strip').classList.remove('hidden');
   document.getElementById('milestone-bar').classList.remove('hidden');
@@ -1195,19 +1102,7 @@ function buildSummary(seizureDuration) {
     container.innerHTML += `
       <div class="summary-item">
         <div class="si-dot si-${sev}"></div>
-        <div><div style="font-weight:500">Breathing rate: ${vitalChecks.breathsPerMin}/min</div><div style="font-size:12px;color:var(--text3);margin-top:2px">Manual 30-second count</div></div>
-      </div>`;
-  }
-
-  const tempResult = classifyTemperature();
-  if (tempResult.sev) {
-    const tempLabel = typeof vitalChecks.tempC === 'number'
-      ? `Temperature: ${vitalChecks.tempC.toFixed(1)}°C`
-      : `Temperature touch check: ${vitalChecks.tempTouch}`;
-    container.innerHTML += `
-      <div class="summary-item">
-        <div class="si-dot si-${tempResult.sev}"></div>
-        <div><div style="font-weight:500">${tempLabel}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">${tempResult.text}</div></div>
+        <div><div style="font-weight:500">Breathing rate: ${vitalChecks.breathsPerMin}/min</div><div style="font-size:12px;color:var(--text3);margin-top:2px">Tap count over 15 seconds</div></div>
       </div>`;
   }
 
@@ -1222,9 +1117,7 @@ function buildSummary(seizureDuration) {
   script += sideAns?.answer === 'one' ? 'The shaking was only on <strong>one side</strong> of the body. ' : '';
   script += eyeAns?.answer === 'fixed' ? 'Their eyes were fixed to one side. ' : '';
   script += postSideAns?.answer === 'weak' ? 'One side of their body seems weaker now. ' : '';
-  if (typeof vitalChecks.breathsPerMin === 'number') script += `Manual breathing rate was about ${vitalChecks.breathsPerMin} per minute. `;
-  if (typeof vitalChecks.tempC === 'number') script += `Temperature was ${vitalChecks.tempC.toFixed(1)} degrees Celsius. `;
-  else if (vitalChecks.tempTouch === 'hot') script += 'Child felt very hot to touch. ';
+  if (typeof vitalChecks.breathsPerMin === 'number') script += `Breathing rate check was about ${vitalChecks.breathsPerMin} per minute. `;
   script += 'They are now in the recovery position."';
   document.getElementById('ambulance-script').innerHTML = script;
 
@@ -1242,9 +1135,7 @@ function shareReport() {
     const time = fmt(a.elapsed);
     lines.push(`[${time}] ${a.label}`);
   });
-  if (typeof vitalChecks.breathsPerMin === 'number') lines.push(`Manual breathing rate: ${vitalChecks.breathsPerMin}/min`);
-  if (typeof vitalChecks.tempC === 'number') lines.push(`Temperature: ${vitalChecks.tempC.toFixed(1)}°C`);
-  else if (vitalChecks.tempTouch) lines.push(`Touch temperature check: ${vitalChecks.tempTouch}`);
+  if (typeof vitalChecks.breathsPerMin === 'number') lines.push(`Tap-count breathing rate: ${vitalChecks.breathsPerMin}/min`);
   lines.push('');
   lines.push(document.getElementById('ambulance-script').innerText);
   const text = lines.join('\n');
@@ -1269,14 +1160,13 @@ function restart() {
   answers = []; queuedQuestions = [];
   milestonesFired = { 2: false, 15: false, 30: false };
   breathingTimer = null;
-  breathingSecondsLeft = 30;
+  breathingSecondsLeft = BREATH_WINDOW_SECONDS;
+  breathTapCount = 0;
   vitalChecks = {
-    breathCount30: null,
+    breathCountWindow: null,
+    breathWindowSeconds: BREATH_WINDOW_SECONDS,
     breathsPerMin: null,
     breathingSeverity: null,
-    tempC: null,
-    tempTouch: null,
-    tempSeverity: null,
     recordedAt: null
   };
   window._stopTime = null;
@@ -1287,17 +1177,13 @@ function restart() {
   document.getElementById('strip-timer').textContent = '00:00';
   document.getElementById('ms-fill').style.width = '0%';
   document.querySelectorAll('.ms-tick').forEach(t => t.classList.remove('reached'));
-  document.getElementById('breath-count-input').value = '';
-  document.getElementById('temp-input').value = '';
-  document.getElementById('breath-count-btn').textContent = 'Start 30s timer';
+  document.getElementById('breath-count-btn').textContent = 'Start 15s check';
   document.getElementById('breath-countdown').textContent = 'Ready';
-  document.querySelectorAll('.temp-touch').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('breath-tap-btn').disabled = true;
+  document.getElementById('breath-tap-count').textContent = 'Count: 0';
   renderBreathingResult();
-  renderTemperatureResult();
   showScreen('screen-start');
 }
-
-initVitalsUI();
 </script>
 </body>
 </html>
