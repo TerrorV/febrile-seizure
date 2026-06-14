@@ -309,6 +309,9 @@ Ship PWA install + offline caching and complete mobile testing.
 - richer medical context, such as age-aware breathing-rate interpretation
 - localization of shared ambulance handoff text
 - optional caregiver notes
+- optional smartwatch integration to detect possible seizure onset for people with epilepticus and surface an earlier alert/start path
+- optional generic illness-tracking mode stored only on the local device, focused on easier sharing of symptoms and timeline details with a medical provider
+- optional generic emergency assessment app to help distinguish likely life-threatening situations from less urgent ones and support clearer escalation decisions
 - accessibility pass for larger text and screen-reader labels
 - analytics only if privacy expectations are clearly defined
 

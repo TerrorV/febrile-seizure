@@ -643,17 +643,21 @@ const QUESTION_SETS = [
     options: [
       { label: 'Yes — both sides shaking',      value: 'both',  icon: '✓', cls: 'yes' },
       { label: 'No — only one side or one limb', value: 'one',   icon: '!', cls: 'no'  },
+      { label: 'Very little movement — can\'t tell', value: 'little', icon: '?', cls: 'unsure' },
       { label: "I can't tell",                  value: 'unsure',icon: '?', cls: 'unsure' },
     ]
   },
   {
-    id: 'breathing_rate',
+    id: 'breathing_now',
     triggerAt: 60,
-    type: 'breath_counter',
     context: 'Breathing check',
-    text: 'Count breaths for 15 seconds',
-    sub: 'Tap +1 breath each time the chest or belly rises.',
-    options: []
+    text: 'Are they breathing right now?',
+    sub: 'Look for the chest or belly rising.',
+    options: [
+      { label: 'Yes — breathing seen', value: 'yes', icon: '✓', cls: 'yes' },
+      { label: 'No — no breaths seen', value: 'no', icon: '!', cls: 'no'  },
+      { label: "I can't tell",         value: 'unsure', icon: '?', cls: 'unsure' },
+    ]
   },
   {
     id: 'lips',
@@ -691,6 +695,15 @@ const QUESTION_SETS = [
       { label: 'Warm but not hot',  value: 'warm',  icon: '?', cls: 'unsure' },
       { label: 'Not hot / normal',  value: 'cool',  icon: '!', cls: 'no'  },
     ]
+  },
+  {
+    id: 'breathing_rate',
+    triggerAt: 340,
+    type: 'breath_counter',
+    context: 'Breathing rate',
+    text: 'Count breaths for 15 seconds',
+    sub: 'Tap +1 breath each time the chest or belly rises.',
+    options: []
   },
   {
     id: 'breathing_effort',
@@ -988,6 +1001,13 @@ function handleAnswer(qid, value) {
     }
   }
 
+  if (qid === 'breathing_now' && value === 'no') {
+    showBanner('🚨 Not breathing', 'No breaths seen. Call 112 now and start rescue breathing if trained.');
+  }
+  if (qid === 'breathing_now' && value === 'unsure') {
+    showBanner('⚠ Breathing unclear', 'If you cannot clearly see breathing, get emergency help now and keep watching the chest and belly.');
+  }
+
   if (qid === 'breathing_rate' && value === 'none') {
     showBanner('🚨 Not breathing', 'No breaths seen. Call 112 now and start rescue breathing if trained.');
   }
@@ -1065,9 +1085,8 @@ function showWaiting() {
   const nextCard = document.getElementById('next-card');
   if (nextQ) {
     nextCard.style.display = 'block';
-    const secsAway = Math.max(0, nextQ.triggerAt - elapsed);
     document.getElementById('next-card-text').textContent =
-      `Next check-in in about ${Math.ceil(secsAway / 60) < 1 ? 'seconds' : Math.ceil(secsAway / 60) + ' min'}`;
+      `Next check-in at around ${Math.round(nextQ.triggerAt / 60) < 1 ? '1 min' : Math.round(nextQ.triggerAt / 60) + ' min'}`;
   } else {
     nextCard.style.display = 'none';
   }
@@ -1106,7 +1125,8 @@ function buildSummary(seizureDuration) {
 
   // Build answer items
   const itemMap = {
-    'side':         { yes: ['both', 'unsure'], label: a => a === 'both' ? 'Shaking on both sides of body' : a === 'one' ? 'Shaking on ONE side only — tell ambulance' : 'Side unclear', sev: a => a === 'one' ? 'alert' : 'ok' },
+    'side':         { yes: ['both', 'little', 'unsure'], label: a => a === 'both' ? 'Shaking on both sides of body' : a === 'one' ? 'Shaking on ONE side only — tell ambulance' : a === 'little' ? 'Very little movement — could not tell whether both sides were involved' : 'Side unclear', sev: a => a === 'one' ? 'alert' : a === 'little' ? 'warn' : 'ok' },
+    'breathing_now': { label: a => a === 'yes' ? 'Breathing was seen at the early check' : a === 'no' ? 'No breathing was seen at the early check' : 'Early breathing check was unclear', sev: a => a === 'yes' ? 'ok' : a === 'no' ? 'alert' : 'warn' },
     'breathing_rate': { label: a => a === 'none' ? 'No breaths seen during 15-second check' : a === 'slow' ? `Breathing slow (~${vitalChecks.breathsPerMin}/min)` : a === 'fast' ? `Breathing fast (~${vitalChecks.breathsPerMin}/min)` : `Breathing rate ~${vitalChecks.breathsPerMin}/min`, sev: a => a === 'none' ? 'alert' : (a === 'slow' || a === 'fast') ? 'warn' : 'ok' },
     'lips':         { label: a => a === 'pink' ? 'Lips were normal / pink colour' : a === 'blue' ? 'BLUE or grey lips — oxygen concern' : 'Lip colour unclear', sev: a => a === 'blue' ? 'alert' : a === 'unsure' ? 'warn' : 'ok' },
     'fever_visible':{ label: a => a === 'hot' ? 'Child felt very hot — likely fever' : a === 'warm' ? 'Child felt warm' : 'No obvious fever', sev: a => a === 'hot' ? 'warn' : 'ok' },
@@ -1135,6 +1155,7 @@ function buildSummary(seizureDuration) {
 
   // Build ambulance script
   const sideAns = answers.find(a => a.qid === 'side');
+  const breathingNowAns = answers.find(a => a.qid === 'breathing_now');
   const feverAns = answers.find(a => a.qid === 'fever_visible');
   const breathingEffortAns = answers.find(a => a.qid === 'breathing_effort');
   const responsivenessAns = answers.find(a => a.qid === 'responsiveness');
@@ -1143,6 +1164,9 @@ function buildSummary(seizureDuration) {
   let script = `"My child has had a seizure that lasted <strong>${durStr}</strong>. `;
   script += feverAns?.answer === 'hot' ? 'They felt very hot — I think they have a fever. ' : '';
   script += sideAns?.answer === 'one' ? 'The shaking was only on <strong>one side</strong> of the body. ' : '';
+  script += sideAns?.answer === 'little' ? 'There was very little movement, so I could not tell whether both sides were involved. ' : '';
+  script += breathingNowAns?.answer === 'no' ? 'At the early breathing check, no breathing was seen. ' : '';
+  script += breathingNowAns?.answer === 'unsure' ? 'At the early breathing check, breathing was hard to confirm. ' : '';
   script += breathingEffortAns?.answer === 'hard' ? 'Their breathing looked hard work or noisy. ' : '';
   script += breathingEffortAns?.answer === 'absent' ? 'There were no breaths or there were long pauses in breathing. ' : '';
   script += responsivenessAns?.answer === 'no' ? 'They did not react to voice or gentle touch. ' : '';

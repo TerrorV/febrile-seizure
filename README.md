@@ -1,6 +1,6 @@
 # Febrile Seizure Emergency Guide
 
-Simple static emergency guide app for febrile seizure response.
+Simple static emergency guide app for febrile seizure response. Online version can be found at https://happy-smoke-0c1463103.7.azurestaticapps.net/
 
 ## Local files
 
