@@ -150,6 +150,16 @@
   }
   .btn-start-main:active { transform: scale(0.97); box-shadow: 0 0 20px rgba(248,113,113,0.2); }
   .start-note { font-size: 12px; color: var(--text3); }
+  .start-disclaimer {
+    max-width: 320px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(248,113,113,0.22);
+    background: rgba(248,113,113,0.08);
+    font-size: 12px;
+    line-height: 1.5;
+    color: #f6c3c3;
+  }
 
   /* ── Question screen ── */
   .q-context {
@@ -431,6 +441,7 @@
       <div class="start-sub">Press start the moment the seizure begins. I'll guide you through what to watch for.</div>
       <button class="btn-start-main" onclick="startSession()">Start timer now</button>
       <div class="start-note">Works without a thermometer, scale, or watch</div>
+      <div class="start-disclaimer">Disclaimer: This applet is not reviewed by, endorsed by, or affiliated with any medical professional, medical organization, or health authority.</div>
     </div>
 
     <!-- QUESTION -->
