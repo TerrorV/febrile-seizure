@@ -1,0 +1,324 @@
+{
+  "app": {
+    "title": "Seizure First Aid",
+    "langName": "English"
+  },
+  "start": {
+    "subtitle": "Press start the moment the seizure begins. I'll guide you through what to watch for.",
+    "startButton": "Start timer now",
+    "note": "Works without a thermometer, scale, or watch",
+    "disclaimer": "Disclaimer: This applet is not reviewed by, endorsed by, or affiliated with any medical professional, medical organization, or health authority."
+  },
+  "timer": {
+    "duration": "seizure duration",
+    "phaseObserving": "Observing",
+    "phaseMedication": "Give medication",
+    "phaseComplex": "Complex seizure",
+    "phaseStatus": "Status — call 112",
+    "btnStopped": "\u2713 Stopped"
+  },
+  "questions": {
+    "side": {
+      "context": "Right now",
+      "text": "Is the shaking happening on BOTH sides of the body?",
+      "sub": "Look at both arms and both legs.",
+      "options": {
+        "both": "Yes — both sides shaking",
+        "one": "No — only one side or one limb",
+        "little": "Very little movement — can't tell",
+        "unsure": "I can't tell"
+      }
+    },
+    "breathing_now": {
+      "context": "Breathing check",
+      "text": "Are they breathing right now?",
+      "sub": "Look for the chest or belly rising.",
+      "options": {
+        "yes": "Yes — breathing seen",
+        "no": "No — no breaths seen",
+        "unsure": "I can't tell"
+      }
+    },
+    "lips": {
+      "context": "Check colour",
+      "text": "What colour are the lips and face?",
+      "sub": "Normal skin or pink is fine. Blue or grey is serious.",
+      "options": {
+        "pink": "Normal / pink colour",
+        "blue": "Blue or grey lips",
+        "unsure": "Hard to tell"
+      }
+    },
+    "still_seizing_2": {
+      "context": "At 2 minutes",
+      "text": "Is the child still seizing?",
+      "sub": "Are the shaking or stiffening movements still happening?",
+      "options": {
+        "yes": "Yes — still seizing",
+        "no": "No — it has stopped"
+      }
+    },
+    "fever_visible": {
+      "context": "At 5 minutes",
+      "text": "Does the child feel hot to the touch?",
+      "sub": "Feel their forehead with the back of your hand.",
+      "options": {
+        "hot": "Yes — very hot",
+        "warm": "Warm but not hot",
+        "cool": "Not hot / normal"
+      }
+    },
+    "breathing_rate": {
+      "context": "Breathing rate",
+      "text": "Count breaths for 15 seconds",
+      "sub": "Tap +1 breath each time the chest or belly rises.",
+      "breathHelp": "Tap the big button for each breath. First tap starts the 15-second timer.",
+      "breathButton": "Tap For Each Breath",
+      "breathWaiting": "Waiting for first tap",
+      "breathCount": "Count: {count}",
+      "breathNoRecorded": "No breathing check recorded yet.",
+      "breathsPerMin": "+1 breath"
+    },
+    "breathing_effort": {
+      "context": "At 6 minutes",
+      "text": "How does the breathing look right now?",
+      "sub": "Look for chest pulling in, noisy breaths, gasping, or long pauses.",
+      "options": {
+        "easy": "Easy and steady",
+        "hard": "Hard work or noisy",
+        "absent": "No breaths or long pauses"
+      }
+    },
+    "responsiveness": {
+      "context": "At 7 minutes",
+      "text": "Do they react to your voice or gentle touch at all?",
+      "sub": "Any movement, sound, or eye opening counts.",
+      "options": {
+        "yes": "Yes — some reaction",
+        "no": "No reaction",
+        "unsure": "Hard to tell"
+      }
+    },
+    "tone": {
+      "context": "At 8 minutes",
+      "text": "Does the body feel floppy or stiff?",
+      "sub": "Use a gentle touch only. Do not hold them down.",
+      "options": {
+        "floppy": "Mostly floppy",
+        "stiff": "Mostly stiff",
+        "mixed": "Mixed or unsure"
+      }
+    },
+    "hands_feet": {
+      "context": "At 9 minutes",
+      "text": "Do the hands and feet feel warm or cold?",
+      "sub": "A quick touch is enough.",
+      "options": {
+        "warm": "Warm",
+        "cold": "Cool or cold",
+        "clammy": "Very cold / clammy"
+      }
+    },
+    "still_seizing_10": {
+      "context": "At 10 minutes",
+      "text": "Is the seizure still continuing?",
+      "sub": "",
+      "options": {
+        "yes": "Yes — still seizing",
+        "no": "No — it stopped"
+      }
+    },
+    "post_side": {
+      "context": "After the seizure",
+      "text": "Is one side of the body weaker than the other?",
+      "sub": "Try asking the child to squeeze both your hands — is one side much weaker?",
+      "options": {
+        "equal": "Both sides seem equal",
+        "weak": "One side seems weaker",
+        "cant": "Can't check yet"
+      }
+    },
+    "post_alert": {
+      "context": "After the seizure",
+      "text": "Is the child starting to wake up or respond?",
+      "sub": "It is normal to be very sleepy for several minutes after a seizure.",
+      "options": {
+        "yes": "Yes — waking up slowly",
+        "no": "Still completely unresponsive"
+      }
+    }
+  },
+  "waiting": {
+    "phase0": {
+      "emoji": "\ud83d\udc41\ufe0f",
+      "title": "Keep watching",
+      "body": "Stay calm. Don't hold the child down or put anything in their mouth. Time the seizure.",
+      "actions": [
+        "Keep them on their side if possible",
+        "Clear the area of hard or sharp objects",
+        "Stay with them at all times",
+        "Call 112 if this is their first ever seizure"
+      ]
+    },
+    "phase1": {
+      "emoji": "\u26a0\ufe0f",
+      "title": "Medication if available",
+      "body": "If you have emergency seizure medication (prescribed by a doctor), give it now.",
+      "actions": [
+        "Keep them on their side",
+        "Watch the breathing",
+        "Stay on the phone with emergency services if called"
+      ]
+    },
+    "phase2": {
+      "emoji": "\ud83d\udea8",
+      "title": "Emergency — call 112",
+      "body": "This seizure is lasting longer than 15 minutes. Emergency services must be on the way.",
+      "actions": [
+        "Stay on the phone with 112",
+        "Keep them on their side",
+        "Do not give food or water"
+      ]
+    },
+    "nextCardLabel": "Next check-in",
+    "nextCardAt": "Next check-in at around {time}"
+  },
+  "milestones": {
+    "2min": {
+      "label": "\u26a0 2 minutes",
+      "text": "If medication is available, give it now. Keep watching the breathing."
+    },
+    "15min": {
+      "label": "\ud83d\udea8 15 minutes — call emergency services now",
+      "text": "This is a complex seizure. Call 112 immediately if you haven't already."
+    },
+    "30min": {
+      "label": "\ud83d\udea8 30 minutes — febrile status epilepticus",
+      "text": "Tell the ambulance the seizure has lasted 30 minutes. Stay on the phone with emergency services."
+    }
+  },
+  "banners": {
+    "notBreathing": {
+      "label": "\ud83d\udea8 Not breathing",
+      "text": "No breaths seen. Call 112 now and start rescue breathing if trained."
+    },
+    "breathingUnclear": {
+      "label": "\u26a0 Breathing unclear",
+      "text": "If you cannot clearly see breathing, get emergency help now and keep watching the chest and belly."
+    },
+    "breathingConcern": {
+      "label": "\u26a0 Breathing concern",
+      "text": "Breathing rate was outside usual range. Keep close watch and update emergency services."
+    },
+    "blueLips": {
+      "label": "\ud83d\udea8 Blue lips",
+      "text": "This is urgent. Call 112 immediately if not already done."
+    },
+    "oneSided": {
+      "label": "\u26a0 One-sided shaking",
+      "text": "Note this — tell the ambulance. Keep watching."
+    },
+    "breathingEmergency": {
+      "label": "\ud83d\udea8 Breathing emergency",
+      "text": "No breaths or long pauses seen. Call 112 now and start rescue breathing if trained."
+    },
+    "breathingHard": {
+      "label": "\u26a0 Breathing concern",
+      "text": "Breathing looks hard work or noisy. Keep watching closely and update emergency services."
+    },
+    "noResponse": {
+      "label": "\u26a0 No response",
+      "text": "No reaction to voice or touch. Keep timing the seizure and update emergency services."
+    }
+  },
+  "summary": {
+    "title": "Seizure summary",
+    "subtitle": "For ambulance handover",
+    "durationLabel": "Total seizure duration",
+    "statusEpilepticus": "\u26a0 Febrile status epilepticus (\u226530 min)",
+    "complexSeizure": "\u26a0 Complex febrile seizure (\u226515 min)",
+    "prolonged": "Prolonged — medication was due",
+    "sectionWhatHappened": "What happened",
+    "ambulanceTitle": "\ud83d\udcde Tell the ambulance",
+    "btnShare": "\u2196 Share / copy summary",
+    "btnRestart": "Start over",
+    "btnCopied": "\u2713 Copied to clipboard",
+    "reportTitle": "SEIZURE SUMMARY",
+    "reportSeparator": "===========",
+    "reportDuration": "Duration: {dur}",
+    "reportStarted": "Started: {time}",
+    "reportObservations": "OBSERVATIONS:",
+    "reportBreathRate": "Tap-count breathing rate: {bpm}/min",
+    "scriptStart": "My child has had a seizure that lasted <strong>{dur}</strong>. ",
+    "scriptFever": "They felt very hot — I think they have a fever. ",
+    "scriptOneSide": "The shaking was only on <strong>one side</strong> of the body. ",
+    "scriptLittle": "There was very little movement, so I could not tell whether both sides were involved. ",
+    "scriptNoBreath": "At the early breathing check, no breathing was seen. ",
+    "scriptBreathUnsure": "At the early breathing check, breathing was hard to confirm. ",
+    "scriptBreathHard": "Their breathing looked hard work or noisy. ",
+    "scriptBreathAbsent": "There were no breaths or there were long pauses in breathing. ",
+    "scriptNoResponse": "They did not react to voice or gentle touch. ",
+    "scriptWeak": "One side of their body seems weaker now. ",
+    "scriptBreathRate": "Breathing rate check was about {bpm} per minute. ",
+    "scriptEnd": "They are now in the recovery position.",
+    "summaryItems": {
+      "side": {
+        "both": "Shaking on both sides of body",
+        "one": "Shaking on ONE side only — tell ambulance",
+        "little": "Very little movement — could not tell whether both sides were involved",
+        "unsure": "Side unclear"
+      },
+      "breathing_now": {
+        "yes": "Breathing was seen at the early check",
+        "no": "No breathing was seen at the early check",
+        "unsure": "Early breathing check was unclear"
+      },
+      "breathing_rate": {
+        "none": "No breaths seen during 15-second check",
+        "slow": "Breathing slow (~{bpm}/min)",
+        "fast": "Breathing fast (~{bpm}/min)",
+        "normal": "Breathing rate ~{bpm}/min"
+      },
+      "lips": {
+        "pink": "Lips were normal / pink colour",
+        "blue": "BLUE or grey lips — oxygen concern",
+        "unsure": "Lip colour unclear"
+      },
+      "fever_visible": {
+        "hot": "Child felt very hot — likely fever",
+        "warm": "Child felt warm",
+        "cool": "No obvious fever"
+      },
+      "breathing_effort": {
+        "easy": "Breathing looked easy and steady",
+        "hard": "Breathing looked hard work or noisy",
+        "absent": "No breaths or long pauses seen"
+      },
+      "responsiveness": {
+        "yes": "Some reaction to voice or touch",
+        "no": "No reaction to voice or touch",
+        "unsure": "Responsiveness unclear"
+      },
+      "tone": {
+        "floppy": "Body felt mostly floppy",
+        "stiff": "Body felt mostly stiff",
+        "mixed": "Body tone mixed or unclear"
+      },
+      "hands_feet": {
+        "warm": "Hands and feet felt warm",
+        "cold": "Hands and feet felt cool or cold",
+        "clammy": "Hands and feet felt very cold or clammy"
+      },
+      "post_side": {
+        "equal": "Both sides equal strength after seizure",
+        "weak": "One side WEAKER after seizure — tell ambulance",
+        "cant": "Strength not assessed yet"
+      },
+      "post_alert": {
+        "yes": "Child starting to wake up (normal recovery)",
+        "no": "Child still unresponsive after seizure"
+      }
+    },
+    "notedAt": "Noted at {time}"
+  }
+}

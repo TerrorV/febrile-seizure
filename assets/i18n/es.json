@@ -1,0 +1,324 @@
+{
+  "app": {
+    "title": "Primeros Auxilios en Convulsiones",
+    "langName": "Español"
+  },
+  "start": {
+    "subtitle": "Presione inicio en el momento en que comience la convulsión. Le guiaré sobre qué observar.",
+    "startButton": "Iniciar temporizador ahora",
+    "note": "Funciona sin termómetro, báscula ni reloj",
+    "disclaimer": "Aviso: Esta aplicación no ha sido revisada, respaldada ni asociada con ningún profesional médico, organización médica ni autoridad de salud."
+  },
+  "timer": {
+    "duration": "duración de la convulsión",
+    "phaseObserving": "Observando",
+    "phaseMedication": "Administrar medicamento",
+    "phaseComplex": "Convulsión compleja",
+    "phaseStatus": "Estado epiléptico — llame al 112",
+    "btnStopped": "\u2713 Detenida"
+  },
+  "questions": {
+    "side": {
+      "context": "Ahora mismo",
+      "text": "¿Los temblores ocurren en AMBOS lados del cuerpo?",
+      "sub": "Observe ambos brazos y ambas piernas.",
+      "options": {
+        "both": "S\u00ed — tiembla ambos lados",
+        "one": "No — solo un lado o una extremidad",
+        "little": "Muy poco movimiento — no se distingue",
+        "unsure": "No puedo distinguirlo"
+      }
+    },
+    "breathing_now": {
+      "context": "Revisión de respiración",
+      "text": "¿Está respirando ahora mismo?",
+      "sub": "Observe si el pecho o el abdomen se elevan.",
+      "options": {
+        "yes": "S\u00ed — se observa respiración",
+        "no": "No — no se observan respiraciones",
+        "unsure": "No puedo distinguirlo"
+      }
+    },
+    "lips": {
+      "context": "Comprobar color",
+      "text": "¿De qué color están los labios y el rostro?",
+      "sub": "Color normal o rosado está bien. Azul o gris es grave.",
+      "options": {
+        "pink": "Color normal / rosado",
+        "blue": "Labios azules o grises",
+        "unsure": "Dif\u00edcil de distinguir"
+      }
+    },
+    "still_seizing_2": {
+      "context": "A los 2 minutos",
+      "text": "¿El ni\u00f1o sigue teniendo convulsiones?",
+      "sub": "¿Los temblores o rigidez siguen ocurriendo?",
+      "options": {
+        "yes": "S\u00ed — sigue con convulsiones",
+        "no": "No — ha dejado"
+      }
+    },
+    "fever_visible": {
+      "context": "A los 5 minutos",
+      "text": "¿El ni\u00f1o se siente caliente al tacto?",
+      "sub": "Toque su frente con el dorso de la mano.",
+      "options": {
+        "hot": "S\u00ed — muy caliente",
+        "warm": "Tibio pero no caliente",
+        "cool": "No caliente / normal"
+      }
+    },
+    "breathing_rate": {
+      "context": "Frecuencia respiratoria",
+      "text": "Cuentе respiraciones durante 15 segundos",
+      "sub": "Presione +1 respiración cada vez que el pecho o abdomen se eleve.",
+      "breathHelp": "Presione el bot\u00f3n grande por cada respiración. La primera presión inicia el temporizador de 15 segundos.",
+      "breathButton": "Presione por Respiración",
+      "breathWaiting": "Esperando primera presión",
+      "breathCount": "Cuenta: {count}",
+      "breathNoRecorded": "A\u00fan no se registró revisión de respiración.",
+      "breathsPerMin": "+1 respiración"
+    },
+    "breathing_effort": {
+      "context": "A los 6 minutos",
+      "text": "¿C\u00f3mo parece la respiración ahora mismo?",
+      "sub": "Observe si el pecho se hunde, respiraciones ruidosas, jadeos o pausas largas.",
+      "options": {
+        "easy": "F\u00e1cil y constante",
+        "hard": "Con esfuerzo o ruidosa",
+        "absent": "Sin respiración o pausas largas"
+      }
+    },
+    "responsiveness": {
+      "context": "A los 7 minutos",
+      "text": "¿Reacciona de alguna forma a su voz o un toque suave?",
+      "sub": "Cualquier movimiento, sonido o apertura de ojos cuenta.",
+      "options": {
+        "yes": "S\u00ed — alguna reacci\u00f3n",
+        "no": "Sin reacci\u00f3n",
+        "unsure": "Dif\u00edcil de distinguir"
+      }
+    },
+    "tone": {
+      "context": "A los 8 minutos",
+      "text": "¿El cuerpo se siente fl\u00e1ccido o r\u00edgido?",
+      "sub": "Use solo un toque suave. No lo sujete con fuerza.",
+      "options": {
+        "floppy": "Mayormente fl\u00e1ccido",
+        "stiff": "Mayormente r\u00edgido",
+        "mixed": "Mixto o no se distingue"
+      }
+    },
+    "hands_feet": {
+      "context": "A los 9 minutos",
+      "text": "¿Las manos y pies se sienten calientes o fr\u00edos?",
+      "sub": "Un toque breve es suficiente.",
+      "options": {
+        "warm": "Calientes",
+        "cold": "Fr\u00edos o fr\u00edos",
+  "clammy": "Muy fr\u00edos / h\u00famedidos"
+      }
+    },
+    "still_seizing_10": {
+      "context": "A los 10 minutos",
+      "text": "¿La convulsión sigue continuando?",
+      "sub": "",
+      "options": {
+        "yes": "S\u00ed — sigue con convulsiones",
+        "no": "No — ha detenido"
+      }
+    },
+    "post_side": {
+      "context": "Despu\u00e9s de la convulsión",
+      "text": "¿Un lado del cuerpo est\u00e1 m\u00e1s d\u00e9bil que el otro?",
+      "sub": "Pida al ni\u00f1o que apriete ambas manos — ¿un lado est\u00e1 mucho m\u00e1s d\u00e9bil?",
+      "options": {
+        "equal": "Ambos lados parecen iguales",
+        "weak": "Un lado parece m\u00e1s d\u00e9bil",
+        "cant": "A\u00fan no se puede comprobar"
+      }
+    },
+    "post_alert": {
+      "context": "Despu\u00e9s de la convulsión",
+      "text": "¿El ni\u00f1o empieza a despertar o responder?",
+      "sub": "Es normal estar muy somnoliento durante varios minutos despu\u00e9s de una convulsión.",
+      "options": {
+        "yes": "S\u00ed — despertando lentamente",
+        "no": "Sigue completamente sin respuesta"
+      }
+    }
+  },
+  "waiting": {
+    "phase0": {
+      "emoji": "\ud83d\udc41\ufe0f",
+      "title": "Sigue observando",
+      "body": "Mantenga la calma. No sujete al ni\u00f1o ni coloque nada en su boca. Cronometre la convulsión.",
+      "actions": [
+        "Mant\u00e9ngalo de costado si es posible",
+        "Despeje el \u00e1rea de objetos duros o punzantes",
+        "No lo deje solo en ning\u00fan momento",
+        "Llame al 112 si es su primera convulsión"
+      ]
+    },
+    "phase1": {
+      "emoji": "\u26a0\ufe0f",
+      "title": "Medicamento si est\u00e1 disponible",
+      "body": "Si tiene medicamento de emergencia para convulsiones (recetado por un m\u00e9dico), admini\u00f3strelo ahora.",
+      "actions": [
+        "Mant\u00e9ngalo de costado",
+        "Vigile la respiración",
+        "Mant\u00e9ngase en l\u00ednea con los servicios de emergencia si ya llam\u00f3"
+      ]
+    },
+    "phase2": {
+      "emoji": "\ud83d\udea8",
+      "title": "Emergencia — llame al 112",
+      "body": "Esta convulsión dura m\u00e1s de 15 minutos. Los servicios de emergencia deben estar en camino.",
+      "actions": [
+        "Mant\u00e9ngase en l\u00ednea con el 112",
+        "Mant\u00e9ngalo de costado",
+        "No d\u00e9 comida ni agua"
+      ]
+    },
+    "nextCardLabel": "Pr\u00f3xima revisi\u00f3n",
+    "nextCardAt": "Pr\u00f3xima revisi\u00f3n a las {time} aproximadamente"
+  },
+  "milestones": {
+    "2min": {
+      "label": "\u26a0 2 minutos",
+      "text": "Si tiene medicamento disponible, admini\u00f3strelo ahora. Siga vigilando la respiración."
+    },
+    "15min": {
+      "label": "\ud83d\udea8 15 minutos — llame a emergencias ahora",
+      "text": "Esta es una convulsión compleja. Llame al 112 inmediatamente si no lo ha hecho ya."
+    },
+    "30min": {
+      "label": "\ud83d\udea8 30 minutos — estado epiléptico febril",
+      "text": "Indique a la ambulancia que la convulsión ha durado 30 minutos. Mant\u00e9ngase en l\u00ednea con emergencias."
+    }
+  },
+  "banners": {
+    "notBreathing": {
+      "label": "\ud83d\udea8 No respira",
+      "text": "No se observan respiraciones. Llame al 112 ahora e inicie ventilación de rescate si est\u00e1 entrenado."
+    },
+    "breathingUnclear": {
+      "label": "\u26a0 Respiración no clara",
+      "text": "Si no puede ver claramente la respiración, solicite ayuda de emergencia ahora y siga vigilando el pecho y el abdomen."
+    },
+    "breathingConcern": {
+      "label": "\u26a0 Preocupación por respiración",
+      "text": "La frecuencia respiratoria est\u00e1 fuera del rango habitual. Vigile de cerca e informe a los servicios de emergencia."
+    },
+    "blueLips": {
+      "label": "\ud83d\udea8 Labios azules",
+      "text": "Esto es urgente. Llame al 112 inmediatamente si no lo ha hecho."
+    },
+    "oneSided": {
+      "label": "\u26a0 Temblores unilaterales",
+      "text": "Tome nota — indique esto a la ambulancia. Siga vigilando."
+    },
+    "breathingEmergency": {
+      "label": "\ud83d\udea8 Emergencia respiratoria",
+      "text": "No se observan respiraciones o hay pausas largas. Llame al 112 ahora e inicie ventilación de rescate si est\u00e1 entrenado."
+    },
+    "breathingHard": {
+      "label": "\u26a0 Preocupación por respiración",
+      "text": "La respiración parece con esfuerzo o ruidosa. Vigile de cerca e informe a los servicios de emergencia."
+    },
+    "noResponse": {
+      "label": "\u26a0 Sin respuesta",
+      "text": "No hay reacci\u00f3n a la voz o al tacto. Siga cronometrando la convulsión e informe a los servicios de emergencia."
+    }
+  },
+  "summary": {
+    "title": "Resumen de la convulsión",
+    "subtitle": "Para entregar a la ambulancia",
+    "durationLabel": "Duración total de la convulsión",
+    "statusEpilepticus": "\u26a0 Estado epiléptico febril (\u226530 min)",
+    "complexSeizure": "\u26a0 Convulsión febril compleja (\u226515 min)",
+    "prolonged": "Prolongada — se debi\u00f3 administrar medicamento",
+    "sectionWhatHappened": "Lo ocurrido",
+    "ambulanceTitle": "\ud83d\udcde Indique a la ambulancia",
+    "btnShare": "\u2196 Compartir / copiar resumen",
+    "btnRestart": "Reiniciar",
+    "btnCopied": "\u2713 Copiado al portapapeles",
+    "reportTitle": "RESUMEN DE CONVULSI\u00d3N",
+    "reportSeparator": "===========",
+    "reportDuration": "Duración: {dur}",
+    "reportStarted": "Inicio: {time}",
+    "reportObservations": "OBSERVACIONES:",
+    "reportBreathRate": "Frecuencia respiratoria por cuenta: {bpm}/min",
+    "scriptStart": "Mi ni\u00f1o ha tenido una convulsión que dur\u00f3 <strong>{dur}</strong>. ",
+    "scriptFever": "Se sent\u00eda muy caliente — creo que tiene fiebre. ",
+    "scriptOneSide": "Los temblores fueron solo en <strong>un lado</strong> del cuerpo. ",
+    "scriptLittle": "Hubo muy poco movimiento, as\u00ed que no pude distinguir si ambos lados estaban implicados. ",
+    "scriptNoBreath": "En la revisi\u00f3n temprana de respiración, no se observ\u00f3 respiración. ",
+    "scriptBreathUnsure": "En la revisi\u00f3n temprana de respiración, la respiración era dif\u00edcil de confirmar. ",
+    "scriptBreathHard": "La respiración pare\u00f1a con esfuerzo o ruidosa. ",
+    "scriptBreathAbsent": "No hubo respiraciones o hubo pausas largas en la respiración. ",
+    "scriptNoResponse": "No reaccion\u00f3 a la voz ni al toque suave. ",
+    "scriptWeak": "Un lado de su cuerpo parece m\u00e1s d\u00e9bil ahora. ",
+    "scriptBreathRate": "La revisi\u00f3n de frecuencia respiratoria fue de aproximadamente {bpm} por minuto. ",
+    "scriptEnd": "Ahora est\u00e1 en posici\u00f3n lateral de seguridad.",
+    "summaryItems": {
+      "side": {
+        "both": "Temblores en ambos lados del cuerpo",
+        "one": "Temblores en UN lado solo — indique a la ambulancia",
+        "little": "Muy poco movimiento — no se distingui\u00f3 si ambos lados estaban implicados",
+        "unsure": "Lado no claro"
+      },
+      "breathing_now": {
+        "yes": "Se observ\u00f3 respiración en la revisi\u00f3n temprana",
+        "no": "No se observ\u00f3 respiración en la revisi\u00f3n temprana",
+        "unsure": "Revisi\u00f3n temprana de respiración no clara"
+      },
+      "breathing_rate": {
+        "none": "No se observaron respiraciones durante la revisi\u00f3n de 15 segundos",
+        "slow": "Respiración lenta (~{bpm}/min)",
+        "fast": "Respiración r\u00e1pida (~{bpm}/min)",
+        "normal": "Frecuencia respiratoria ~{bpm}/min"
+      },
+      "lips": {
+        "pink": "Labios de color normal / rosado",
+        "blue": "LABIOS AZULES o grises — riesgo de ox\u00edgeno",
+        "unsure": "Color de labios no claro"
+      },
+      "fever_visible": {
+        "hot": "Ni\u00f1o se sent\u00eda muy caliente — probable fiebre",
+        "warm": "Ni\u00f1o se sent\u00eda tibio",
+        "cool": "Sin fiebre aparente"
+      },
+      "breathing_effort": {
+        "easy": "Respiración pare\u00f1a f\u00e1cil y constante",
+        "hard": "Respiración pare\u00f1a con esfuerzo o ruidosa",
+        "absent": "No se observaron respiraciones o hubo pausas largas"
+      },
+      "responsiveness": {
+        "yes": "Alguna reacci\u00f3n a la voz o al tacto",
+        "no": "Sin reacci\u00f3n a la voz o al tacto",
+        "unsure": "Nivel de respuesta no claro"
+      },
+      "tone": {
+        "floppy": "Cuerpo se sent\u00eda mayormente fl\u00e1ccido",
+        "stiff": "Cuerpo se sent\u00eda mayormente r\u00edgido",
+        "mixed": "Tono muscular mixto o no claro"
+      },
+      "hands_feet": {
+        "warm": "Manos y pies se sent\u00edan calientes",
+        "cold": "Manos y pies se sent\u00edan fr\u00edos",
+  "clammy": "Manos y pies se sent\u00edan muy fr\u00edos o h\u00famedidos"
+      },
+      "post_side": {
+        "equal": "Ambos lados con fuerza igual despu\u00e9s de la convulsión",
+        "weak": "Un lado M\u00c1S D\u00c9BIL despu\u00e9s de la convulsión — indique a la ambulancia",
+        "cant": "Fuerza no evaluada a\u00fan"
+      },
+      "post_alert": {
+        "yes": "Ni\u00f1o empezando a despertar (recuperaci\u00f3n normal)",
+        "no": "Ni\u00f1o sigue sin respuesta despu\u00e9s de la convulsión"
+      }
+    },
+    "notedAt": "Registrado a las {time}"
+  }
+}
