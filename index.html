@@ -458,10 +458,11 @@
        <div class="start-note" id="start-note">Works without a thermometer, scale, or watch</div>
        <div class="start-disclaimer" id="start-disclaimer">Disclaimer: This applet is not reviewed by, endorsed by, or affiliated with any medical professional, medical organization, or health authority.</div>
        <!-- Language switcher -->
-       <div style="display:flex;gap:8px;margin-top:4px;justify-content:center">
-         <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">EN</button>
-         <button class="lang-btn" data-lang="es" onclick="switchLanguage('es')">ES</button>
-       </div>
+        <div style="display:flex;gap:8px;margin-top:4px;justify-content:center">
+          <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">EN</button>
+          <button class="lang-btn" data-lang="es" onclick="switchLanguage('es')">ES</button>
+          <button class="lang-btn" data-lang="bg" onclick="switchLanguage('bg')">BG</button>
+        </div>
     </div>
 
     <!-- QUESTION -->
@@ -876,11 +877,16 @@ let vitalChecks = {
 // ── i18n init ──────────────────────────────────────────────────────────────────
 I18N.register('en', EN);
 
-// Load Spanish via fetch (falls back silently if offline)
+// Load translations via fetch (falls back silently if offline)
 fetch('assets/i18n/es.json')
   .then(r => r.json())
   .then(data => { I18N.register('es', data); })
   .catch(() => { /* es.json not available */ });
+
+fetch('assets/i18n/bg.json')
+  .then(r => r.json())
+  .then(data => { I18N.register('bg', data); })
+  .catch(() => { /* bg.json not available */ });
 
 // Question definition IDs — text is resolved from i18n at render time
 const QUESTION_IDS = [
@@ -1387,18 +1393,24 @@ function handleAnswer(qid, value) {
   showNextQuestion();
 }
 
-function showWaiting() {
-  const actions = [];
-  const nextQ = queuedQuestions
-    .filter(q => q.triggerAt !== null)
-    .sort((a,b) => a.triggerAt - b.triggerAt)[0];
-
+function getWaitingPhase() {
   let phaseKey = 'phase0';
   if (elapsed < 120) phaseKey = 'phase0';
   else if (elapsed < 900) phaseKey = 'phase1';
   else phaseKey = 'phase2';
 
-  const phase = I18N.t('waiting.' + phaseKey);
+  // Resolve from the current i18n dictionary (complex object, not a leaf string)
+  const dict = I18N.dicts[I18N.current] || I18N.dicts[I18N.fallback];
+  const phase = (dict && dict.waiting && dict.waiting[phaseKey]) || EN.waiting[phaseKey];
+  return phase;
+}
+
+function showWaiting() {
+  const nextQ = queuedQuestions
+    .filter(q => q.triggerAt !== null)
+    .sort((a,b) => a.triggerAt - b.triggerAt)[0];
+
+  const phase = getWaitingPhase();
 
   document.getElementById('w-emoji').textContent = phase.emoji;
   document.getElementById('w-title').textContent = phase.title;
