@@ -6,7 +6,7 @@ Simple static emergency guide app for febrile seizure response. Online version c
 
 ```
 febrile-seizure/
-├── index.html                          # Canonical entry point (HTML shell + app logic)
+├── index.html                          # Canonical entry point (HTML shell)
 ├── assets/
 │   ├── css/
 │   │   └── app.css                     # All application styles
