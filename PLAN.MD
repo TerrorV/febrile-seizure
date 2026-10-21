@@ -49,8 +49,8 @@ Right now every change must be kept in sync across two HTML files. That will bec
   - a development copy that is no longer edited directly, or
   - remove its special role and document that `index.html` is canonical.
 - Split inline code into small static assets:
-  - `assets/css/app.css`
-  - `assets/js/app.js`
+  - `assets/css/app.css` ✅ done (commit 0672a70)
+  - `assets/js/app.js` ✅ done (incomplete; inline block still present)
   - optional `assets/js/config.js` or `assets/js/questions.js`
 - Introduce a small app-state object instead of many loose globals where practical.
 - Add a short README section describing the file structure.

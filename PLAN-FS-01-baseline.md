@@ -201,3 +201,11 @@ The medical content surface is clean: no dosing, no diagnosis, appropriate discl
 ---
 
 *Artifact created 2026-09-18. Source: OpenClaw local-agent session ca86101.*
+
+## Overnight review — 2026-10-21
+
+The CSS extraction matches the previous inline `<style>` block byte-for-byte,
+but the overnight edit removed the document doctype, opening HTML/head tags,
+metadata, and title. The review restored that document shell and retained the
+external stylesheet link. This refactor remains unaccepted until the complete
+HTML change is committed and browser/manual checklist T-01 is run.
