@@ -53,7 +53,7 @@ Right now every change must be kept in sync across two HTML files. That will bec
   - `assets/js/app.js` ✅ done (commit 26963d0)
   - optional `assets/js/config.js` or `assets/js/questions.js`
 - Introduce a small app-state object instead of many loose globals where practical.
-- Add a short README section describing the file structure (⬜ pending).
+- Add a short README section describing the file structure (✅ done — 3ba94b0)
 
 ### Acceptance Criteria
 
