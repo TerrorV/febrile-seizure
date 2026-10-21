@@ -4,8 +4,8 @@ Simple static emergency guide app for febrile seizure response. Online version c
 
 ## Local files
 
-- `fs_responder.html`: original source file
-- `index.html`: site entry point used for deployment
+- `index.html`: site entry point and canonical source (used for deployment)
+- `fs_responder.html` was removed during Phase 1 refactoring — `index.html` is now the sole entry point
 
 ## Deploy to Azure Static Web Apps
 
@@ -16,4 +16,4 @@ Simple static emergency guide app for febrile seizure response. Online version c
    - Value: deployment token from Azure
 4. Push to `main`.
 
-The workflow file at `.github/workflows/azure-static-web-apps.yml` deploys the app automatically.
+The workflow file at `.github/workflows/azure-static-web-apps-happy-smoke-0c1463103.yml` deploys the app automatically.

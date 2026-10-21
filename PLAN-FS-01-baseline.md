@@ -63,7 +63,7 @@
 
 | # | Check | Status | Notes |
 |---|-------|--------|-------|
-| SS-01 | Duplicate `index.html` / `fs_responder.html` | ❌ FAIL | Both files are currently identical. Per PLAN.MD Phase 1, one source of truth must be established. Currently both are editable and identical — any future change must be applied to both or one removed. |
+| SS-01 | Duplicate `index.html` / `fs_responder.html` | ✅ PASS | Removed `fs_responder.html` (1250 lines); `index.html` is now the sole canonical entry point. README updated. |
 | SS-02 | No CSS/JS separation | ❌ FAIL | All CSS and JS inline in HTML. Makes translation/theming/PWA work (Phases 3–6) impossible without restructuring. |
 | SS-03 | Loose globals (15+ mutable) | ⚠️ WARN | Timer state, answers, milestones, breathing state all stored as loose `let` globals. Functional but fragile for future feature additions. |
 
