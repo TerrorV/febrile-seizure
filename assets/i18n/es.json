@@ -116,7 +116,7 @@
       "options": {
         "warm": "Calientes",
         "cold": "Fr\u00edos o fr\u00edos",
-  "clammy": "Muy fr\u00edos / h\u00famedidos"
+        "clammy": "Muy fr\u00edos / h\u00famedidos"
       }
     },
     "still_seizing_10": {
@@ -307,7 +307,7 @@
       "hands_feet": {
         "warm": "Manos y pies se sent\u00edan calientes",
         "cold": "Manos y pies se sent\u00edan fr\u00edos",
-  "clammy": "Manos y pies se sent\u00edan muy fr\u00edos o h\u00famedidos"
+        "clammy": "Manos y pies se sent\u00edan muy fr\u00edos o h\u00famedidos"
       },
       "post_side": {
         "equal": "Ambos lados con fuerza igual despu\u00e9s de la convulsión",
