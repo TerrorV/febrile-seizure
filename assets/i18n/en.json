@@ -15,7 +15,7 @@
     "phaseMedication": "Give medication",
     "phaseComplex": "Complex seizure",
     "phaseStatus": "Status — call 112",
-    "btnStopped": "\u2713 Stopped"
+    "btnStopped": "✓ Stopped"
   },
   "questions": {
     "side": {
@@ -150,7 +150,7 @@
   },
   "waiting": {
     "phase0": {
-      "emoji": "\ud83d\udc41\ufe0f",
+      "emoji": "👁️",
       "title": "Keep watching",
       "body": "Stay calm. Don't hold the child down or put anything in their mouth. Time the seizure.",
       "actions": [
@@ -161,7 +161,7 @@
       ]
     },
     "phase1": {
-      "emoji": "\u26a0\ufe0f",
+      "emoji": "⚠️",
       "title": "Medication if available",
       "body": "If you have emergency seizure medication (prescribed by a doctor), give it now.",
       "actions": [
@@ -171,7 +171,7 @@
       ]
     },
     "phase2": {
-      "emoji": "\ud83d\udea8",
+      "emoji": "🚨",
       "title": "Emergency — call 112",
       "body": "This seizure is lasting longer than 15 minutes. Emergency services must be on the way.",
       "actions": [
@@ -185,49 +185,49 @@
   },
   "milestones": {
     "2min": {
-      "label": "\u26a0 2 minutes",
+      "label": "⚠ 2 minutes",
       "text": "If medication is available, give it now. Keep watching the breathing."
     },
     "15min": {
-      "label": "\ud83d\udea8 15 minutes — call emergency services now",
+      "label": "🚨 15 minutes — call emergency services now",
       "text": "This is a complex seizure. Call 112 immediately if you haven't already."
     },
     "30min": {
-      "label": "\ud83d\udea8 30 minutes — febrile status epilepticus",
+      "label": "🚨 30 minutes — febrile status epilepticus",
       "text": "Tell the ambulance the seizure has lasted 30 minutes. Stay on the phone with emergency services."
     }
   },
   "banners": {
     "notBreathing": {
-      "label": "\ud83d\udea8 Not breathing",
+      "label": "🚨 Not breathing",
       "text": "No breaths seen. Call 112 now and start rescue breathing if trained."
     },
     "breathingUnclear": {
-      "label": "\u26a0 Breathing unclear",
+      "label": "⚠ Breathing unclear",
       "text": "If you cannot clearly see breathing, get emergency help now and keep watching the chest and belly."
     },
     "breathingConcern": {
-      "label": "\u26a0 Breathing concern",
+      "label": "⚠ Breathing concern",
       "text": "Breathing rate was outside usual range. Keep close watch and update emergency services."
     },
     "blueLips": {
-      "label": "\ud83d\udea8 Blue lips",
+      "label": "🚨 Blue lips",
       "text": "This is urgent. Call 112 immediately if not already done."
     },
     "oneSided": {
-      "label": "\u26a0 One-sided shaking",
+      "label": "⚠ One-sided shaking",
       "text": "Note this — tell the ambulance. Keep watching."
     },
     "breathingEmergency": {
-      "label": "\ud83d\udea8 Breathing emergency",
+      "label": "🚨 Breathing emergency",
       "text": "No breaths or long pauses seen. Call 112 now and start rescue breathing if trained."
     },
     "breathingHard": {
-      "label": "\u26a0 Breathing concern",
+      "label": "⚠ Breathing concern",
       "text": "Breathing looks hard work or noisy. Keep watching closely and update emergency services."
     },
     "noResponse": {
-      "label": "\u26a0 No response",
+      "label": "⚠ No response",
       "text": "No reaction to voice or touch. Keep timing the seizure and update emergency services."
     }
   },
@@ -235,14 +235,14 @@
     "title": "Seizure summary",
     "subtitle": "For ambulance handover",
     "durationLabel": "Total seizure duration",
-    "statusEpilepticus": "\u26a0 Febrile status epilepticus (\u226530 min)",
-    "complexSeizure": "\u26a0 Complex febrile seizure (\u226515 min)",
+    "statusEpilepticus": "⚠ Febrile status epilepticus (≥30 min)",
+    "complexSeizure": "⚠ Complex febrile seizure (≥15 min)",
     "prolonged": "Prolonged — medication was due",
     "sectionWhatHappened": "What happened",
-    "ambulanceTitle": "\ud83d\udcde Tell the ambulance",
-    "btnShare": "\u2196 Share / copy summary",
+    "ambulanceTitle": "📞 Tell the ambulance",
+    "btnShare": "↖ Share / copy summary",
     "btnRestart": "Start over",
-    "btnCopied": "\u2713 Copied to clipboard",
+    "btnCopied": "✓ Copied to clipboard",
     "reportTitle": "SEIZURE SUMMARY",
     "reportSeparator": "===========",
     "reportDuration": "Duration: {dur}",
@@ -320,5 +320,15 @@
       }
     },
     "notedAt": "Noted at {time}"
+  },
+  "settings": {
+    "title": "Settings",
+    "childProfile": "Child profile",
+    "age": "Age (years)",
+    "weight": "Weight (kg)",
+    "appearance": "Appearance",
+    "language": "Language",
+    "clearData": "Clear saved data",
+    "confirmClear": "Clear all saved data?"
   }
 }
