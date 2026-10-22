@@ -142,6 +142,14 @@
     -webkit-tap-highlight-color: transparent;
   }
   .btn-start-main:active { transform: scale(0.97); box-shadow: 0 0 20px rgba(248,113,113,0.2); }
+  .btn-settings {
+    background: var(--surface2); color: var(--text2);
+    border: 1.5px solid var(--border2); border-radius: 12px;
+    padding: 8px 16px; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: background 0.12s, color 0.12s;
+  }
+  .btn-settings:hover { background: var(--border); color: var(--text); }
+  .btn-settings:active { transform: scale(0.97); }
   .start-note { font-size: 12px; color: var(--text3); }
   .start-disclaimer {
     max-width: 320px;

@@ -603,6 +603,12 @@ function completeBreathingQuestion() {
   setTimeout(() => answerQuestion(q, opt), 250);
 }
 
+// ── Settings stub ──────────────────────────────────────────────────────────────
+function showSettings() {
+  // Phase 2 placeholder — modal or screen to come
+  alert('Settings (coming soon)');
+}
+
 // ── Session logic ──────────────────────────────────────────────────────────────
 function startSession() {
   try { getAudio().resume(); } catch(e) {}
