@@ -152,6 +152,15 @@ If keeping build-free static hosting is important, a simple JavaScript object or
   localization for the English locale; other language files (bg, es) will need
   matching keys added.
 
+## Review status — 2026-10-22 16:20 UTC
+
+- **banners i18n cleanup & bg/es keys** ✅ —
+  Fixed `en.json`: removed duplicate `banners` block and structured
+  `breathSlow/Fast/Ok` as `{label, text}` objects matching the existing pattern.
+  Added matching translations to `bg.json` and `es.json`. All three JSON files
+  validated with `node -e 'JSON.parse(...)'`. No JS changes required beyond the
+  earlier wiring commit.
+
 Phase 2 settings and language-persistence commits were reviewed against the
 selected plan. Static validation passed: `node --check assets/js/app.js` and
 JSON parsing for `assets/i18n/bg.json`, `en.json`, and `es.json`. The recent

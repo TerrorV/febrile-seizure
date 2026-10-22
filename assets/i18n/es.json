@@ -229,6 +229,18 @@
     "noResponse": {
       "label": "⚠ Sin respuesta",
       "text": "No hay reacción a la voz o al tacto. Siga cronometrando la convulsión e informe a los servicios de emergencia."
+    },
+    "breathSlow": {
+      "label": "⚠ Respiración lenta",
+      "text": "La respiración parece lenta ({bpm}/min). Vigile de cerca y llame al 112 si empeora."
+    },
+    "breathFast": {
+      "label": "⚠ Respiración rápida",
+      "text": "La respiración parece rápida ({bpm}/min). Esto puede ocurrir con fiebre; continúe la vigilancia cercana."
+    },
+    "breathOk": {
+      "label": "✓ Respiración OK",
+      "text": "Ritmo respiratorio registrado: {bpm}/min."
     }
   },
   "summary": {

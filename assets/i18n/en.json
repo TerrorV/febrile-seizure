@@ -229,6 +229,18 @@
     "noResponse": {
       "label": "⚠ No response",
       "text": "No reaction to voice or touch. Keep timing the seizure and update emergency services."
+    },
+    "breathSlow": {
+      "label": "⚠ Slow breathing",
+      "text": "Breathing appears slow ({bpm}/min). Keep watching closely and call 112 if breathing worsens."
+    },
+    "breathFast": {
+      "label": "⚠ Fast breathing",
+      "text": "Breathing appears fast ({bpm}/min). This can happen with fever; continue close monitoring."
+    },
+    "breathOk": {
+      "label": "✓ Breathing OK",
+      "text": "Breathing rate recorded at {bpm}/min."
     }
   },
   "summary": {
