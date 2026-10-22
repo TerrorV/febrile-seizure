@@ -650,13 +650,38 @@ function completeBreathingQuestion() {
 
 // ── Settings ───────────────────────────────────────────────────────────────────
 const SETTINGS_KEY = 'febrile-seizure-settings';
+const VERSION_KEY = 'febrile-seizure-settings-version';
+const SCHEMA_VERSION = 1;
+
+function readSettings() {
+  // Check schema version; clear if mismatched or corrupt.
+  const ver = localStorage.getItem(VERSION_KEY);
+  if (ver !== String(SCHEMA_VERSION)) {
+    if (ver !== null) { /* migrated: clear old schema */ }
+    localStorage.removeItem(SETTINGS_KEY);
+    localStorage.setItem(VERSION_KEY, String(SCHEMA_VERSION));
+    return {};
+  }
+  try {
+    return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+  } catch(e) {
+    /* corrupt — reset */
+    localStorage.removeItem(SETTINGS_KEY);
+    return {};
+  }
+}
+
+function writeSettings(partial) {
+  const existing = readSettings();
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...existing, ...partial }));
+}
 
 function showSettings() {
   const modal = document.getElementById('settings-modal');
   modal.classList.add('visible');
   // Restore saved profile data
   try {
-    const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    const s = readSettings();
     const ageEl = document.getElementById('settings-age');
     const weightEl = document.getElementById('settings-weight');
     const updatedEl = document.getElementById('settings-updated');
