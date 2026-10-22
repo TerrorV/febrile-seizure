@@ -143,6 +143,14 @@ If keeping build-free static hosting is important, a simple JavaScript object or
 - Adding a new language does not require editing core UI logic.
 - Missing translation keys fall back safely.
 
+## Review status — 2026-10-22 06:00 UTC
+
+Phase 2 settings and language-persistence commits were reviewed against the
+selected plan. Static validation passed: `node --check assets/js/app.js` and
+JSON parsing for `assets/i18n/bg.json`, `en.json`, and `es.json`. The recent
+claims are internally consistent, but no browser-level interaction test is
+present, so the settings/emergency-flow acceptance remains evidence-limited.
+
 ## Phase 4: Theme Support
 
 ### Goal
