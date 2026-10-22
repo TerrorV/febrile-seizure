@@ -338,6 +338,7 @@
     "childProfile": "Child profile",
     "age": "Age (years)",
     "weight": "Weight (kg)",
+    "theme": "Theme",
     "appearance": "Appearance",
     "language": "Language",
     "clearData": "Clear saved data",

@@ -152,6 +152,14 @@ If keeping build-free static hosting is important, a simple JavaScript object or
   localization for the English locale; other language files (bg, es) will need
   matching keys added.
 
+## Review status — 2026-10-22 20:20 UTC
+
+- **settings.theme i18n keys missing** ✅ —
+  Added `settings.theme` key to `en.json` ("Theme"), `bg.json` ("Тема"),
+  and `es.json` ("Tema"). `index.html` line 131 uses `data-i18n="settings.theme"`
+  which previously fell back to the raw key. All three JSON files validated
+  with `node -e 'JSON.parse(...)'`. Phase 3 translation completeness.
+
 ## Review status — 2026-10-22 19:57 UTC
 
 - **settings schema versioning** ✅ —

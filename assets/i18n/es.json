@@ -338,6 +338,7 @@
     "childProfile": "Perfil del niño",
     "age": "Edad (años)",
     "weight": "Peso (kg)",
+    "theme": "Tema",
     "appearance": "Apariencia",
     "language": "Idioma",
     "clearData": "Borrar datos guardados",
