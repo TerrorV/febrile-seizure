@@ -603,10 +603,53 @@ function completeBreathingQuestion() {
   setTimeout(() => answerQuestion(q, opt), 250);
 }
 
-// ── Settings stub ──────────────────────────────────────────────────────────────
+// ── Settings ───────────────────────────────────────────────────────────────────
+const SETTINGS_KEY = 'febrile-seizure-settings';
+
 function showSettings() {
-  // Phase 2 placeholder — modal or screen to come
-  alert('Settings (coming soon)');
+  const modal = document.getElementById('settings-modal');
+  modal.classList.add('visible');
+  // Restore saved profile data
+  try {
+    const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    const ageEl = document.getElementById('settings-age');
+    const weightEl = document.getElementById('settings-weight');
+    const updatedEl = document.getElementById('settings-updated');
+    if (s.age) ageEl.value = s.age;
+    if (s.weight) weightEl.value = s.weight;
+    if (s.updated) updatedEl.textContent = s.updated;
+    else updatedEl.textContent = '—';
+  } catch(e) { /* ignore corrupt data */ }
+  // Highlight current language
+  document.querySelectorAll('#settings-lang-row .lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === I18N.currentLang);
+  });
+}
+
+function closeSettings() {
+  // Persist profile data before closing
+  try {
+    const ageEl = document.getElementById('settings-age');
+    const weightEl = document.getElementById('settings-weight');
+    const age = ageEl.value ? Number(ageEl.value) : null;
+    const weight = weightEl.value ? Number(weightEl.value) : null;
+    if (age !== null || weight !== null) {
+      const existing = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      const updated = new Date().toLocaleString();
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...existing, age, weight, updated }));
+    }
+  } catch(e) { /* ignore */ }
+  const modal = document.getElementById('settings-modal');
+  modal.classList.remove('visible');
+}
+
+function clearSavedData() {
+  if (confirm(I18N.t('settings.confirmClear') || 'Clear all saved data?')) {
+    localStorage.removeItem(SETTINGS_KEY);
+    document.getElementById('settings-age').value = '';
+    document.getElementById('settings-weight').value = '';
+    document.getElementById('settings-updated').textContent = '—';
+  }
 }
 
 // ── Session logic ──────────────────────────────────────────────────────────────
