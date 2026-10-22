@@ -69,16 +69,18 @@ Create a non-emergency settings area for optional preferences and stored profile
 
 ### Tasks
 
-- Add a simple "Settings" or "Child profile" entry point on the start screen. ✅ done (2026-10-22) — stub button in index.html, `.btn-settings` style in app.css, `showSettings()` stub in app.js; full modal pending.
+- Add a simple "Settings" or "Child profile" entry point on the start screen. ✅ done (2026-10-22)
+- Add a lightweight modal or separate screen for settings. ✅ done (38a08b7)
+- Persist child profile and language settings in localStorage. ✅ done (d752703 — language now persists via `switchLanguage`; profile age/weight save/closeSettings already working)
 - Keep the emergency start button visually dominant.
 - Add a lightweight modal or separate screen for settings.
 - Define the first settings model:
-  - language
-  - theme mode
-  - child age
-  - child weight
-- Add a "clear saved data" action.
-- Add "last updated" metadata for saved profile values.
+  - language ✅ persisted (d752703)
+  - theme mode ⬜ pending (Phase 4)
+  - child age ✅ persisted
+  - child weight ✅ persisted
+- Add a "clear saved data" action. ✅ done
+- Add "last updated" metadata for saved profile values. ✅ done
 
 ### UX Notes
 
