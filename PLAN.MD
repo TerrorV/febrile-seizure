@@ -152,6 +152,13 @@ If keeping build-free static hosting is important, a simple JavaScript object or
   localization for the English locale; other language files (bg, es) will need
   matching keys added.
 
+## Review status — 2026-10-22 19:57 UTC
+
+- **settings schema versioning** ✅ —
+  Added `readSettings()` and `writeSettings()` with SCHEMA_VERSION migration
+  to `assets/js/app.js`; localStorage is now safely cleared on schema changes
+  or corruption. `node --check` passes. Phase 5 foundation.
+
 ## Review status — 2026-10-22 16:20 UTC
 
 - **banners i18n cleanup & bg/es keys** ✅ —
