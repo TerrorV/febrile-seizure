@@ -409,6 +409,11 @@ function switchLanguage(lang) {
   document.querySelectorAll('.lang-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
+  // Persist language preference
+  try {
+    const existing = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...existing, lang }));
+  } catch(e) { /* ignore */ }
   // Update html lang attribute
   document.documentElement.lang = lang;
 }
@@ -1137,5 +1142,12 @@ function restart() {
 
 // ── Init ───────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // Restore saved language preference before applying translations
+  try {
+    const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    if (s.lang && I18N.dicts[s.lang]) {
+      I18N.setLanguage(s.lang);
+    }
+  } catch(e) { /* ignore corrupt data */ }
   applyTranslations();
 });
