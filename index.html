@@ -128,7 +128,13 @@
       </div>
       <div class="settings-section">
         <div class="settings-section-label" data-i18n="settings.appearance">Appearance</div>
-        <label class="settings-label" data-i18n="settings.language">Language</label>
+        <label class="settings-label" data-i18n="settings.theme">Theme</label>
+        <div class="settings-lang-row" id="settings-theme-row">
+          <button class="lang-btn" data-theme="light" onclick="setTheme('light')">☀ Light</button>
+          <button class="lang-btn" data-theme="dark" onclick="setTheme('dark')">☾ Dark</button>
+          <button class="lang-btn" data-theme="system" onclick="setTheme('system')">⚙ System</button>
+        </div>
+        <label class="settings-label" data-i18n="settings.language" style="margin-top:12px">Language</label>
         <div class="settings-lang-row" id="settings-lang-row">
           <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">EN</button>
           <button class="lang-btn" data-lang="es" onclick="switchLanguage('es')">ES</button>

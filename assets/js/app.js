@@ -402,6 +402,46 @@ const OPT_META = {
   cant:    { icon: '?', cls: 'unsure' },
 };
 
+// ── Theme switcher ─────────────────────────────────────────────────────────────
+function setTheme(mode) {
+  // mode: 'light', 'dark', or 'system'
+  let effective = mode;
+  if (mode === 'system') {
+    effective = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', effective);
+  // Persist preference
+  try {
+    const existing = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...existing, themeMode: mode }));
+  } catch(e) { /* ignore */ }
+  // Update theme button states
+  document.querySelectorAll('#settings-theme-row .lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.theme === mode);
+  });
+}
+
+function applySystemTheme() {
+  const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+  if (s.themeMode === 'system') {
+    const effective = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', effective);
+  }
+}
+
+// Listen for system theme changes when in system mode
+function initTheme() {
+  const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+  const mode = s.themeMode || 'dark'; // default to dark
+  setTheme(mode);
+  // Hook system theme changes
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+    if (JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}').themeMode === 'system') {
+      applySystemTheme();
+    }
+  });
+}
+
 // ── Language switcher ──────────────────────────────────────────────────────────
 function switchLanguage(lang) {
   I18N.setLanguage(lang);
