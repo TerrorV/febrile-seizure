@@ -143,7 +143,14 @@ If keeping build-free static hosting is important, a simple JavaScript object or
 - Adding a new language does not require editing core UI logic.
 - Missing translation keys fall back safely.
 
-## Review status — 2026-10-22 06:00 UTC
+## Review status — 2026-10-22 10:50 UTC
+
+- **i18n wiring: `classifyBreathingRate()` wired to i18n keys** ✅ —
+  `breathSlow`, `breathFast`, `breathOk` keys in `en.json` are now referenced
+  from `classifyBreathingRate()` in `assets/js/app.js` instead of hardcoded
+  English strings. `node --check` passes. This completes the breathing-rate
+  localization for the English locale; other language files (bg, es) will need
+  matching keys added.
 
 Phase 2 settings and language-persistence commits were reviewed against the
 selected plan. Static validation passed: `node --check assets/js/app.js` and

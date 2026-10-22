@@ -523,9 +523,9 @@ function updateVitalsTimestamp() {
 }
 
 function classifyBreathingRate(bpm) {
-  if (bpm < 20) return { sev: 'warn', text: `Breathing appears slow (${bpm}/min). Keep watching closely and call 112 if breathing worsens.` };
-  if (bpm > 40) return { sev: 'warn', text: `Breathing appears fast (${bpm}/min). This can happen with fever; continue close monitoring.` };
-  return { sev: 'ok', text: `Breathing rate recorded at ${bpm}/min.` };
+  if (bpm < 20) return { sev: 'warn', text: I18N.t('breathSlow', { bpm }) };
+  if (bpm > 40) return { sev: 'warn', text: I18N.t('breathFast', { bpm }) };
+  return { sev: 'ok', text: I18N.t('breathOk', { bpm }) };
 }
 
 function renderBreathingResult() {
