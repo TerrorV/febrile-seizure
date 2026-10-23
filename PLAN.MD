@@ -143,6 +143,13 @@ If keeping build-free static hosting is important, a simple JavaScript object or
 - Adding a new language does not require editing core UI logic.
 - Missing translation keys fall back safely.
 
+## Review status — 2026-10-23 08:57 UTC
+
+- **settings: add consent line with i18n key** ✅ —
+  Added `settings.consent` key (`"Stored only on this device"`) to `en.json` and
+  a matching `<div class="settings-consent">` in `index.html` settings panel.
+  Phase 5 consent copy. Committed as 0c6658e.
+
 ## Review status — 2026-10-23 06:51 UTC
 
 - **i18n: breathe countdown `secondsLeft` key** ✅ —
