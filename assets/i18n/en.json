@@ -334,6 +334,10 @@
     },
     "notedAt": "Noted at {time}"
   },
+  "update": {
+    "available": "A new version is available.",
+    "reload": "Reload"
+  },
   "settings": {
     "title": "Settings",
     "childProfile": "Child profile",

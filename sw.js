@@ -27,7 +27,39 @@ self.addEventListener('activate', (event) => {
       )
     )
   );
-  self.clients.claim();
+  return self.clients.claim();
+});
+
+// Notify all clients when a new service worker is waiting
+function notifyClients() {
+  self.clients.matchAll().then(clients => {
+    clients.forEach(client => {
+      client.postMessage({ type: 'UPDATE_AVAILABLE', cacheName: CACHE_NAME });
+    });
+  });
+}
+
+// Listen for skipWaiting signal from new SW
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  if (event.data && event.data.type === 'CLIENTS_CLAIM') {
+    self.clients.claim();
+  }
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
+      )
+    ).then(() => {
+      notifyClients();
+    })
+  );
+  return self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {

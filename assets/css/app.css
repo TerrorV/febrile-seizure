@@ -509,3 +509,26 @@
     .q-text { font-size: 26px; }
     .q-btn  { padding: 20px; }
   }
+
+/* Update available banner */
+.update-banner {
+  background: var(--info-bg);
+  color: var(--info-text);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.update-banner button {
+  background: var(--info-text);
+  color: var(--info-bg);
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}

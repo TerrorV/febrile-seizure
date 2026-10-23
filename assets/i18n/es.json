@@ -334,6 +334,10 @@
     },
     "notedAt": "Registrado a las {time}"
   },
+  "update": {
+    "available": "Hay una nueva versión disponible.",
+    "reload": "Recargar"
+  },
   "settings": {
     "title": "Configuración",
     "childProfile": "Perfil del niño",

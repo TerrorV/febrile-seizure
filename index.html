@@ -148,13 +148,44 @@
   </div>
 </div>
 
+<!-- Update available banner -->
+<div id="update-banner" class="update-banner hidden">
+  <span data-i18n="update.available">A new version is available.</span>
+  <button id="btn-update" onclick="updateApp()" data-i18n="update.reload">Reload</button>
+</div>
+
 <!-- i18n helper -->
 <script src="assets/js/i18n.js"></script>
 
 <script src="assets/js/app.js"></script>
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+(function initSW() {
+  if ('serviceWorker' in navigator) {
+    const regPromise = navigator.serviceWorker.register('sw.js');
+    regPromise.then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            document.getElementById('update-banner').classList.remove('hidden');
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
+          }
+        });
+      });
+      navigator.serviceWorker.addEventListener('message', e => {
+        if (e.data && e.data.type === 'UPDATE_AVAILABLE') {
+          document.getElementById('update-banner').classList.remove('hidden');
+        }
+      });
+    });
+  }
+})();
+
+function updateApp() {
+  if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'CLIENTS_CLAIM' });
+    window.location.reload();
+  }
 }
 </script>
 </body>
