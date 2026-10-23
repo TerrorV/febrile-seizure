@@ -143,6 +143,13 @@ If keeping build-free static hosting is important, a simple JavaScript object or
 - Adding a new language does not require editing core UI logic.
 - Missing translation keys fall back safely.
 
+## Review status — 2026-10-23 16:20 UTC
+
+- **i18n: add missing settings.consent key to bg.json and es.json** ✅ —
+  Added `settings.consent` key (`"Съхранява се само на това устройство"` /
+  `"Almacenado solo en este dispositivo"`) to bg.json and es.json. All
+  three locale files now share the same keys. Validated with JSON.parse.
+
 ## Review status — 2026-10-23 13:22 UTC
 
 - **plan: mark theme mode as complete in Phase 2 task list** ✅ —

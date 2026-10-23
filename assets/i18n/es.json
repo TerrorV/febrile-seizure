@@ -344,6 +344,7 @@
     "age": "Edad (años)",
     "weight": "Peso (kg)",
     "theme": "Tema",
+    "consent": "Almacenado solo en este dispositivo",
     "appearance": "Apariencia",
     "language": "Idioma",
     "clearData": "Borrar datos guardados",
