@@ -343,6 +343,7 @@
     "appearance": "Appearance",
     "language": "Language",
     "clearData": "Clear saved data",
-    "confirmClear": "Clear all saved data?"
+    "confirmClear": "Clear all saved data?",
+    "consent": "Stored only on this device"
   }
 }
