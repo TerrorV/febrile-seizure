@@ -268,7 +268,7 @@
     "scriptLittle": "Hubo muy poco movimiento, así que no pude distinguir si ambos lados estaban implicados. ",
     "scriptNoBreath": "En la revisión temprana de respiración, no se observó respiración. ",
     "scriptBreathUnsure": "En la revisión temprana de respiración, la respiración era difícil de confirmar. ",
-    "scriptBreathHard": "La respiración pareña con esfuerzo o ruidosa. ",
+    "scriptBreathHard": "La respiración parecía con esfuerzo o ruidosa. ",
     "scriptBreathAbsent": "No hubo respiraciones o hubo pausas largas en la respiración. ",
     "scriptNoResponse": "No reaccionó a la voz ni al toque suave. ",
     "scriptWeak": "Un lado de su cuerpo parece más débil ahora. ",
@@ -303,8 +303,8 @@
         "cool": "Sin fiebre aparente"
       },
       "breathing_effort": {
-        "easy": "Respiración pareña fácil y constante",
-        "hard": "Respiración pareña con esfuerzo o ruidosa",
+        "easy": "Respiración parecía fácil y constante",
+        "hard": "Respiración parecía con esfuerzo o ruidosa",
         "absent": "No se observaron respiraciones o hubo pausas largas"
       },
       "responsiveness": {
