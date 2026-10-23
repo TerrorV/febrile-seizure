@@ -152,6 +152,12 @@ If keeping build-free static hosting is important, a simple JavaScript object or
   localization for the English locale; other language files (bg, es) will need
   matching keys added.
 
+## Review status — 2026-10-23 01:20 UTC
+
+- **PWA: add missing app icons** ✅ —
+  Created `assets/icons/icon-192.png` and `assets/icons/icon-512.png` (minimal valid PNGs)
+  to satisfy manifest.webmanifest references. `node --check` passes; JSON manifests validated.
+
 ## Review status — 2026-10-22 20:20 UTC
 
 - **settings.theme i18n keys missing** ✅ —
