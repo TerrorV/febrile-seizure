@@ -270,9 +270,9 @@ Allow installable, offline-friendly use from a phone home screen.
 
 ### Tasks
 
-- Add `manifest.webmanifest`.
-- Add app icons in required sizes.
-- Add a service worker for caching static assets.
+- Add `manifest.webmanifest`. ✅ done (ac3824e)
+- Add app icons in required sizes. ✅ done (125f091)
+- Add a service worker for caching static assets. ✅ done (2026-10-23)
 - Cache core assets for offline use:
   - `index.html`
   - CSS
@@ -350,6 +350,14 @@ Persist child age and weight, then expose them carefully in summary/export.
 ### Milestone 5
 
 Ship PWA install + offline caching and complete mobile testing.
+
+## Review status — 2026-10-23 03:20 UTC
+
+- **PWA: add service worker + registration** ✅ —
+  Created `sw.js` with install/activate/fetch handlers caching all static assets
+  (HTML, CSS, JS, i18n, icons). Added `navigator.serviceWorker.register('sw.js')`
+  to `index.html`. `node -c` passes for JS; JSON manifests validated. This completes
+  Phase 6 offline caching; update-notifications and install prompt remain as future work.
 
 ## Future Items After This Plan
 
