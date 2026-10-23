@@ -76,7 +76,7 @@ Create a non-emergency settings area for optional preferences and stored profile
 - Add a lightweight modal or separate screen for settings.
 - Define the first settings model:
   - language ✅ persisted (d752703)
-  - theme mode ⬜ pending (Phase 4)
+  - theme mode ✅ done (Phase 4 — 41679b0 + 7d6385f)
   - child age ✅ persisted
   - child weight ✅ persisted
 - Add a "clear saved data" action. ✅ done
@@ -142,6 +142,13 @@ If keeping build-free static hosting is important, a simple JavaScript object or
 - Switching language updates the full UI without breaking the seizure flow.
 - Adding a new language does not require editing core UI logic.
 - Missing translation keys fall back safely.
+
+## Review status — 2026-10-23 13:22 UTC
+
+- **plan: mark theme mode as complete in Phase 2 task list** ✅ —
+  Theme toggle (light/dark/system) and semantic CSS variables were
+  implemented in Phase 4 commits 41679b0 and 7d6385f, but the Phase 2
+  task line still showed ⬜. Updated to ✅.
 
 ## Review status — 2026-10-23 08:57 UTC
 
