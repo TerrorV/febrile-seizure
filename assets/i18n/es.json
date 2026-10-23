@@ -77,7 +77,8 @@
       "breathWaiting": "Esperando primera presión",
       "breathCount": "Cuenta: {count}",
       "breathNoRecorded": "Aún no se registró revisión de respiración.",
-      "breathsPerMin": "+1 respiración"
+      "breathsPerMin": "+1 respiración",
+      "secondsLeft": "Quedan {count}s"
     },
     "breathing_effort": {
       "context": "A los 6 minutos",

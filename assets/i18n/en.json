@@ -77,7 +77,8 @@
       "breathWaiting": "Waiting for first tap",
       "breathCount": "Count: {count}",
       "breathNoRecorded": "No breathing check recorded yet.",
-      "breathsPerMin": "+1 breath"
+      "breathsPerMin": "+1 breath",
+      "secondsLeft": "{count}s left"
     },
     "breathing_effort": {
       "context": "At 6 minutes",

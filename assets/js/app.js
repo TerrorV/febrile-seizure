@@ -614,7 +614,7 @@ function tapBreath() {
     breathingStarted = true;
     breathingSecondsLeft = BREATH_WINDOW_SECONDS;
     btn.textContent = I18N.t('questions.breathing_rate.breathsPerMin');
-    countdown.textContent = `${BREATH_WINDOW_SECONDS}s left`;
+    countdown.textContent = I18N.t('questions.breathing_rate.secondsLeft', { count: BREATH_WINDOW_SECONDS });
     breathingTimer = setInterval(() => {
       breathingSecondsLeft -= 1;
       if (breathingSecondsLeft <= 0) {
@@ -626,7 +626,7 @@ function tapBreath() {
         completeBreathingQuestion();
         return;
       }
-      countdown.textContent = `${breathingSecondsLeft}s left`;
+      countdown.textContent = I18N.t('questions.breathing_rate.secondsLeft', { count: breathingSecondsLeft });
     }, 1000);
   }
 

@@ -143,6 +143,14 @@ If keeping build-free static hosting is important, a simple JavaScript object or
 - Adding a new language does not require editing core UI logic.
 - Missing translation keys fall back safely.
 
+## Review status — 2026-10-23 06:51 UTC
+
+- **i18n: breathe countdown `secondsLeft` key** ✅ —
+  Added `questions.breathing_rate.secondsLeft` key to `en.json` ("{count}s left"),
+  `bg.json` ("Остават {count}s"), `es.json` ("Quedan {count}s"). Wired both
+  `countdown.textContent` lines in `tapBreath()` (app.js 617, 629) to use
+  `I18N.t()` instead of hardcoded English. `node --check` and JSON parsing pass.
+
 ## Review status — 2026-10-23 05:20 UTC
 
 - **theme: replace hardcoded #fff / #f6c3c3 with semantic CSS variables** ✅ —

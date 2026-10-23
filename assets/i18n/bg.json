@@ -77,7 +77,8 @@
       "breathWaiting": "Очаква първото натискане",
       "breathCount": "Брой: {count}",
       "breathNoRecorded": "Все още няма записана проверка на дишането.",
-      "breathsPerMin": "+1 вдишване"
+      "breathsPerMin": "+1 вдишване",
+      "secondsLeft": "Остават {count}s"
     },
     "breathing_effort": {
       "context": "След 6 минути",
