@@ -24,7 +24,6 @@ febrile-seizure/
 ## Local files
 
 - `index.html`: site entry point and canonical source (used for deployment)
-- `fs_responder.html` was removed during Phase 1 refactoring — `index.html` is now the sole entry point
 
 ## Deploy to Azure Static Web Apps
 
