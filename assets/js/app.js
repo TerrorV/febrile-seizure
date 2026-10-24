@@ -364,14 +364,14 @@ const QUESTION_IDS = [
   { id: 'breathing_now', triggerAt: 30, options: ['yes', 'no', 'unsure'] },
   { id: 'lips', triggerAt: 60, options: ['pink', 'blue', 'unsure'] },
   { id: 'breathing_effort', triggerAt: 100, options: ['easy', 'hard', 'absent'] },
-  { id: 'still_seizing_2', triggerAt: 125, options: ['yes', 'no'] },
+  { id: 'still_seizing_2', triggerAt: 125, options: ['yes', 'no'], invertColors: true },
   { id: 'side', triggerAt: 135, options: ['both', 'one', 'little', 'unsure'] },
   { id: 'fever_visible', triggerAt: 300, options: ['hot', 'warm', 'cool'] },
   { id: 'breathing_rate', triggerAt: 340, type: 'breath_counter', options: [] },
   { id: 'responsiveness', triggerAt: 420, options: ['yes', 'no', 'unsure'] },
   { id: 'tone', triggerAt: 480, options: ['floppy', 'stiff', 'mixed'] },
   { id: 'hands_feet', triggerAt: 540, options: ['warm', 'cold', 'clammy'] },
-  { id: 'still_seizing_10', triggerAt: 605, options: ['yes', 'no'] },
+  { id: 'still_seizing_10', triggerAt: 605, options: ['yes', 'no'], invertColors: true },
   { id: 'post_side', triggerAt: null, options: ['equal', 'weak', 'cant'] },
   { id: 'post_alert', triggerAt: null, options: ['yes', 'no'] },
 ];
@@ -522,8 +522,11 @@ function renderCurrentQuestion() {
 
   qDef.options.forEach(opt => {
     const meta = OPT_META[opt.value] || { icon: '?', cls: 'unsure' };
+    const cls = qDef.invertColors && meta.cls !== 'unsure'
+      ? (meta.cls === 'yes' ? 'no' : meta.cls === 'no' ? 'yes' : meta.cls)
+      : meta.cls;
     const btn = document.createElement('button');
-    btn.className = 'q-btn ' + meta.cls;
+    btn.className = 'q-btn ' + cls;
     const label = I18N.t('questions.' + qid + '.options.' + opt.value);
     btn.innerHTML = `<div class="q-btn-icon">${meta.icon}</div><div>${label}</div>`;
     btn.onclick = () => answerQuestion(qDef, opt);
@@ -888,8 +891,11 @@ function showQuestion(qDef) {
 
   qDef.options.forEach(value => {
     const meta = OPT_META[value] || { icon: '?', cls: 'unsure' };
+    const cls = qDef.invertColors && meta.cls !== 'unsure'
+      ? (meta.cls === 'yes' ? 'no' : meta.cls === 'no' ? 'yes' : meta.cls)
+      : meta.cls;
     const btn = document.createElement('button');
-    btn.className = 'q-btn ' + meta.cls;
+    btn.className = 'q-btn ' + cls;
     const label = I18N.t('questions.' + qid + '.options.' + value);
     btn.innerHTML = `<div class="q-btn-icon">${meta.icon}</div><div>${label}</div>`;
     btn.onclick = () => answerQuestion(qDef, { value, label });
