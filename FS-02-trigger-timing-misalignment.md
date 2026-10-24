@@ -54,6 +54,11 @@ Similarly for the 10-minute mark:
 - Aligned `still_seizing_10` triggerAt from **605 → 600** (exact 10-min milestone).
 - `node --check` passes. `still_seizing` questions now fire at exact minute boundaries matching their milestone banners.
 
+## Further Fix — 2026-10-24
+
+- Aligned `breathing_effort` triggerAt from **100 → 90** (clean 1:30 boundary, reduces pre-2min question density).
+- `node --check` passes. Questions now space more evenly in the first 3 minutes.
+
 ---
 
 ## Root Cause
