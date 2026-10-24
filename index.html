@@ -30,10 +30,10 @@
   </div>
 
   <!-- Milestone alert banner -->
-  <div id="alert-banner">
-    <div class="banner-label" id="banner-label">Action needed</div>
+  <div id="alert-banner" role="alert" aria-live="assertive">
+    <div class="banner-label" id="banner-label" data-i18n="banner.label">Action needed</div>
     <div class="banner-text"  id="banner-text"></div>
-    <button class="banner-close" onclick="closeBanner()">×</button>
+    <button class="banner-close" aria-label="Dismiss alert" onclick="closeBanner()">×</button>
   </div>
 
   <!-- Screen wrap -->

@@ -353,5 +353,8 @@
     "language": "Idioma",
     "clearData": "Borrar datos guardados",
     "confirmClear": "¿Borrar todos los datos guardados?"
+  },
+  "banner": {
+    "label": "Acción necesaria"
   }
 }

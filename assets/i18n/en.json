@@ -353,5 +353,8 @@
     "clearData": "Clear saved data",
     "confirmClear": "Clear all saved data?",
     "consent": "Stored only on this device"
+  },
+  "banner": {
+    "label": "Action needed"
   }
 }
