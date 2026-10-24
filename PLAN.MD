@@ -435,3 +435,8 @@ Start with the structural cleanup so future work is not duplicated across `fs_re
 
 - **fix: rename tick() → questionTick() to avoid timer-shadow collision (FS-04)** ✅ —
   The original `tick()` sound helper was shadowed by the existing `tick()` timer-tick function, rendering it dead code. Renamed to `questionTick()` and updated the call in `showQuestion()`. `node --check` passes. FS-04 doc updated.
+
+## Review status — 2026-10-24 20:20 UTC
+
+- **a11y: remove user-scalable=no from viewport meta (PLAN-FS-01 CS-05)** ✅ —
+  Removed `user-scalable=no` from the `<meta name="viewport">` tag in `index.html`. This addresses the baseline CS-05 warning about accessibility for low-vision users. App layout remains stable at 1.0 max-scale; users can pinch-zoom if needed. No CSS changes required.
