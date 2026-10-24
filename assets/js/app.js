@@ -562,8 +562,8 @@ function alarm3() {
 }
 
 // FS-04: sound notification helpers
-function tick() {
-  // soft single-tone for question arrival
+function questionTick() {
+  // soft single-tone for question arrival (FS-04)
   beep(660, 0.08, 0.15);
 }
 function attention() {
@@ -877,7 +877,7 @@ function showNextQuestion() {
 }
 
 function showQuestion(qDef) {
-  tick();
+  questionTick();
   clearBreathingTimers();
   breathTapCount = 0;
   breathingStarted = false;

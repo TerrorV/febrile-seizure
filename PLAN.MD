@@ -430,3 +430,8 @@ Start with the structural cleanup so future work is not duplicated across `fs_re
 
 - **sound: MVP notification sounds (FS-04)** ✅ —
   Added `tick()` (question arrival), `attention()` (alert banners), `calmConfirm()` (seizure stopped), `confirmBeep()` (answer) to `assets/js/app.js`. Integrated into `showQuestion`, `showBanner`, `answerQuestion`, `seizureStopped`. `node --check` passes. FS-04 doc updated.
+
+## Review status — 2026-10-24 15:20 UTC
+
+- **fix: rename tick() → questionTick() to avoid timer-shadow collision (FS-04)** ✅ —
+  The original `tick()` sound helper was shadowed by the existing `tick()` timer-tick function, rendering it dead code. Renamed to `questionTick()` and updated the call in `showQuestion()`. `node --check` passes. FS-04 doc updated.
