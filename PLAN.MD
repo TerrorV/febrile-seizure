@@ -415,3 +415,8 @@ Ship PWA install + offline caching and complete mobile testing.
 ## Immediate Next Step
 
 Start with the structural cleanup so future work is not duplicated across `fs_responder.html` and `index.html`.
+
+## Review status — 2026-10-24 08:51 UTC
+
+- **docs: add translation format, PWA behavior, and saved data sections to README** ✅ —
+  Added three new sections to README.md covering translation file format (key hierarchy, placeholders, adding languages), PWA caching/install/offline/update behavior, and localStorage schema versioning/privacy. `node --check` passes for all JS files. Phase 7 documentation.
