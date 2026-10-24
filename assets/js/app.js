@@ -561,6 +561,28 @@ function alarm3() {
   for(let i=0;i<3;i++){beep(1400,0.14,0.28,t+1+i*0.22,'square');beep(1000,0.06,0.14,t+1+i*0.22+0.14,'square');}
 }
 
+// FS-04: sound notification helpers
+function tick() {
+  // soft single-tone for question arrival
+  beep(660, 0.08, 0.15);
+}
+function attention() {
+  // sharper two-tone for alert banners
+  const ctx = getAudio(), t = ctx.currentTime;
+  beep(880, 0.1, 0.18, t);
+  beep(660, 0.1, 0.15, t + 0.1);
+}
+function calmConfirm() {
+  // calming two-tone for seizure stopped
+  const ctx = getAudio(), t = ctx.currentTime;
+  beep(520, 0.15, 0.12, t);
+  beep(480, 0.15, 0.10, t + 0.12);
+}
+function confirmBeep() {
+  // subtle single-tone for answer confirmed
+  beep(440, 0.06, 0.12);
+}
+
 function updateVitalsTimestamp() {
   vitalChecks.recordedAt = elapsed;
 }
@@ -855,6 +877,7 @@ function showNextQuestion() {
 }
 
 function showQuestion(qDef) {
+  tick();
   clearBreathingTimers();
   breathTapCount = 0;
   breathingStarted = false;
@@ -905,6 +928,7 @@ function showQuestion(qDef) {
 }
 
 function answerQuestion(q, opt) {
+  confirmBeep();
   answers.push({ qid: q.id, answer: opt.value, label: opt.label, elapsed: elapsed });
   currentQ = null;
 
@@ -912,6 +936,7 @@ function answerQuestion(q, opt) {
 }
 
 function seizureStopped() {
+  calmConfirm();
   if (sessionEnded) return;
   sessionEnded = true;
   clearInterval(timerInterval);
@@ -1036,6 +1061,7 @@ function showBanner(label, text) {
   document.getElementById('banner-text').textContent  = text;
   const b = document.getElementById('alert-banner');
   b.classList.add('visible');
+  attention();
   clearTimeout(b._timeout);
   b._timeout = setTimeout(closeBanner, 8000);
 }

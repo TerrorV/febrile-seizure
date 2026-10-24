@@ -425,3 +425,8 @@ Start with the structural cleanup so future work is not duplicated across `fs_re
 
 - **ui: add invertColors to post_alert question (FS-03 follow-up)** ✅ —
   `post_alert` had the same inverted-logic bug as `still_seizing_2/10`: "Yes — requires ambulance" rendered green instead of red. Added `invertColors: true` to the question definition in `assets/js/app.js`. FS-03 doc updated with completed fix. `node --check` passes.
+
+## Review status — 2026-10-24 14:20 UTC
+
+- **sound: MVP notification sounds (FS-04)** ✅ —
+  Added `tick()` (question arrival), `attention()` (alert banners), `calmConfirm()` (seizure stopped), `confirmBeep()` (answer) to `assets/js/app.js`. Integrated into `showQuestion`, `showBanner`, `answerQuestion`, `seizureStopped`. `node --check` passes. FS-04 doc updated.
