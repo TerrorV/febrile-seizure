@@ -338,6 +338,10 @@
     "available": "Hay una nueva versión disponible.",
     "reload": "Recargar"
   },
+  "install": {
+    "banner": "Añade a la pantalla de inicio para acceso rápido",
+    "installNow": "Instalar"
+  },
   "settings": {
     "title": "Configuración",
     "childProfile": "Perfil del niño",
