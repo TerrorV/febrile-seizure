@@ -22,6 +22,10 @@ This is semantically backwards. The desired answer ("No, it stopped") is red. Th
 - Updated both rendering paths (lines 525–527, 894–896) to swap the color class when `invertColors` is set: yes→no (green→red), no→yes (red→green), unsure unchanged.
 - `node --check` passes; no CSS changes needed since class names are reused.
 
+## Fix Applied — 2026-10-24 (continued)
+
+- Added `invertColors: true` to `post_alert` question definition in `assets/js/app.js` (line 376). `node --check` passes.
+
 ## Root Cause
 
 `OPT_META` in `assets/js/app.js` (line 380) maps answer keys to CSS classes generically:

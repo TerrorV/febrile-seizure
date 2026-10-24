@@ -373,7 +373,7 @@ const QUESTION_IDS = [
   { id: 'hands_feet', triggerAt: 540, options: ['warm', 'cold', 'clammy'] },
   { id: 'still_seizing_10', triggerAt: 605, options: ['yes', 'no'], invertColors: true },
   { id: 'post_side', triggerAt: null, options: ['equal', 'weak', 'cant'] },
-  { id: 'post_alert', triggerAt: null, options: ['yes', 'no'] },
+  { id: 'post_alert', triggerAt: null, options: ['yes', 'no'], invertColors: true },
 ];
 
 // Icon / class mapping for option values
