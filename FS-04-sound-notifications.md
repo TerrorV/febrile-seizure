@@ -161,7 +161,7 @@ For MVP, hardcode the sounds and make them non-configurable.
 
 ## Fix Applied — 2026-10-24 (continued)
 
-- **Timer start sound not yet wired:** The plan suggested adding sound in `startTimer()`, but no explicit call was added there yet. This is a minor gap, not blocking.
+- **Timer start sound wired:** Added `questionTick()` call in `startSession()` so users get an audible confirmation when the timer starts. `node --check` passes. FS-04 now covers all proposed sound events.
 
 ---
 

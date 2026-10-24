@@ -775,6 +775,7 @@ function startSession() {
   updateTimerStripPhase();
   timerInterval = setInterval(tick, 500);
 
+  questionTick();
   showNextQuestion();
 }
 
