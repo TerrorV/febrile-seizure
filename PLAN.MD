@@ -399,7 +399,7 @@ Ship PWA install + offline caching and complete mobile testing.
   Created `sw.js` with install/activate/fetch handlers caching all static assets
   (HTML, CSS, JS, i18n, icons). Added `navigator.serviceWorker.register('sw.js')`
   to `index.html`. `node -c` passes for JS; JSON manifests validated. This completes
-  Phase 6 offline caching; update-notifications and install prompt remain as future work.
+  ✅ update-notifications and install prompt both implemented (2026-10-25).
 
 ## Future Items After This Plan
 
