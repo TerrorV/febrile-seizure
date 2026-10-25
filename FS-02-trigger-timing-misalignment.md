@@ -67,41 +67,10 @@ The `triggerAt` values were set as raw second counts without ensuring they align
 
 ---
 
-## Investigation Needed
 
-1. **Why 125s / 605s?** Was this intentional (allowing breathing_now, lips, breathing_effort to clear before the still-seizing question), or just a rounding error?
-2. **Does the cascade of 3 early questions make sense?** Having breathing_now, lips, and breathing_effort all fire within the first 100 seconds feels dense for someone trying to observe a seizure.
-3. **Should `still_seizing_2` fire at exactly 120s** to match the milestone, or should milestones be moved to match the questions?
+## Proposed Fix — Completed ✅
 
----
-
-## Proposed Fix
-
-Align all critical question triggers to exact minute boundaries:
-
-```js
-// Proposed changes in assets/js/app.js
-{ id: 'breathing_now', triggerAt: 30, options: ['yes', 'no', 'unsure'] },     // 0:30
-{ id: 'lips', triggerAt: 60, options: ['pink', 'blue', 'unsure'] },           // 1:00
-{ id: 'breathing_effort', triggerAt: 90, options: ['easy', 'hard', 'absent'] }, // 1:30 (was 100)
-{ id: 'still_seizing_2', triggerAt: 120, options: ['yes', 'no'] },            // 2:00 (was 125) ✅ aligns with milestone
-{ id: 'side', triggerAt: 180, options: ['both', 'one', 'little', 'unsure'] }, // 3:00 (was 135)
-{ id: 'fever_visible', triggerAt: 300, options: ['hot', 'warm', 'cool'] },    // 5:00
-{ id: 'breathing_rate', triggerAt: 360, type: 'breath_counter', options: [] }, // 6:00 (was 340)
-{ id: 'responsiveness', triggerAt: 420, options: ['yes', 'no', 'unsure'] },   // 7:00
-{ id: 'tone', triggerAt: 480, options: ['floppy', 'stiff', 'mixed'] },        // 8:00
-{ id: 'hands_feet', triggerAt: 540, options: ['warm', 'cold', 'clammy'] },    // 9:00
-{ id: 'still_seizing_10', triggerAt: 600, options: ['yes', 'no'] },           // 10:00 (was 605) ✅ aligns with milestone
-```
-
-Key changes:
-- `breathing_effort` 100 → **90** (cleaner spacing)
-- `still_seizing_2` 125 → **120** (aligns with 2-min milestone)
-- `side` 135 → **180** (move to 3:00, gives breathing questions room)
-- `breathing_rate` 340 → **360** (6:00, cleaner)
-- `still_seizing_10` 605 → **600** (aligns with 10-min milestone)
-
-This also reduces the pre-2-minute question density from 3 questions to 2, which is better for emergency UX.
+All proposed changes were applied (commits `d01cdd2` and `f5af5a4`). Current triggerAt values in `app.js` match the proposal exactly.
 
 ---
 
