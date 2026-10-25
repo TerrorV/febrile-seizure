@@ -1041,9 +1041,18 @@ function showWaiting() {
   document.getElementById('w-body').textContent  = phase.body;
 
   const actEl = document.getElementById('w-actions');
-  actEl.innerHTML = '';
+  actEl.textContent = '';
   phase.actions.forEach((a, i) => {
-    actEl.innerHTML += `<div class="action-item"><div class="action-num">${i+1}</div><div>${a}</div></div>`;
+    const item = document.createElement('div');
+    item.className = 'action-item';
+    const num = document.createElement('div');
+    num.className = 'action-num';
+    num.textContent = i + 1;
+    item.appendChild(num);
+    const txt = document.createElement('div');
+    txt.textContent = a;
+    item.appendChild(txt);
+    actEl.appendChild(item);
   });
 
   const nextCard = document.getElementById('next-card');
@@ -1177,7 +1186,7 @@ function buildSummary(seizureDuration) {
   script += postSideAns?.answer === 'weak' ? I18N.t('summary.scriptWeak') : '';
   if (typeof vitalChecks.breathsPerMin === 'number') script += I18N.t('summary.scriptBreathRate', { bpm: vitalChecks.breathsPerMin }) + ' ';
   script += '"' + I18N.t('summary.scriptEnd') + '"';
-  document.getElementById('ambulance-script').innerHTML = script;
+  document.getElementById('ambulance-script').textContent = script;
 
   showScreen('screen-summary');
 }

@@ -436,6 +436,11 @@ Start with the structural cleanup so future work is not duplicated across `fs_re
 - **fix: rename tick() → questionTick() to avoid timer-shadow collision (FS-04)** ✅ —
   The original `tick()` sound helper was shadowed by the existing `tick()` timer-tick function, rendering it dead code. Renamed to `questionTick()` and updated the call in `showQuestion()`. `node --check` passes. FS-04 doc updated.
 
+## Review status — 2026-10-25 11:20 UTC
+
+- **safety: harden innerHTML → textContent for ambulance-script and action items** ✅ —
+  Replaced `innerHTML` with `textContent`/`createElement` for the ambulance script and waiting-phase action items, addressing PLAN-FS-01 CS-03. `node --check` passes. `app.js` only.
+
 ## Review status — 2026-10-25 09:20 UTC
 
 - **PWA: add missing doInstall() function (Phase 6)** ✅ —
