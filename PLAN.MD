@@ -436,6 +436,11 @@ Start with the structural cleanup so future work is not duplicated across `fs_re
 - **fix: rename tick() → questionTick() to avoid timer-shadow collision (FS-04)** ✅ —
   The original `tick()` sound helper was shadowed by the existing `tick()` timer-tick function, rendering it dead code. Renamed to `questionTick()` and updated the call in `showQuestion()`. `node --check` passes. FS-04 doc updated.
 
+## Review status — 2026-10-25 01:20 UTC
+
+- **i18n: refactor invertColors → dangerAnswer (FS-03 Option B)** ✅ —
+  Replaced `invertColors: true` with `dangerAnswer: 'yes'` on `still_seizing_2`, `still_seizing_10`, `post_alert`. Both rendering paths updated to use `qDef.dangerAnswer` check. FS-03 doc updated. `node --check` passes.
+
 ## Review status — 2026-10-24 20:20 UTC
 
 - **a11y: remove user-scalable=no from viewport meta (PLAN-FS-01 CS-05)** ✅ —
