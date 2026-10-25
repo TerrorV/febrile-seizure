@@ -22,9 +22,15 @@ This is semantically backwards. The desired answer ("No, it stopped") is red. Th
 - Updated both rendering paths (lines 525–527, 894–896) to swap the color class when `invertColors` is set: yes→no (green→red), no→yes (red→green), unsure unchanged.
 - `node --check` passes; no CSS changes needed since class names are reused.
 
-## Fix Applied — 2026-10-24 (continued)
+## Fix Applied — Option B (dangerAnswer) — 2026-10-25
 
-- Added `invertColors: true` to `post_alert` question definition in `assets/js/app.js` (line 376). `node --check` passes.
+Replaced `invertColors: true` with `dangerAnswer: 'yes'` on all three questions (`still_seizing_2`, `still_seizing_10`, `post_alert`).
+
+Updated both rendering paths (lines ~525 and ~918) to use `qDef.dangerAnswer && opt.value === qDef.dangerAnswer` instead of `qDef.invertColors`.
+
+`node --check` passes. FS-03 doc updated.
+
+
 
 ## Root Cause
 

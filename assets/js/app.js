@@ -364,16 +364,16 @@ const QUESTION_IDS = [
   { id: 'breathing_now', triggerAt: 30, options: ['yes', 'no', 'unsure'] },
   { id: 'lips', triggerAt: 60, options: ['pink', 'blue', 'unsure'] },
   { id: 'breathing_effort', triggerAt: 90, options: ['easy', 'hard', 'absent'] },
-  { id: 'still_seizing_2', triggerAt: 120, options: ['yes', 'no'], invertColors: true },
+  { id: 'still_seizing_2', triggerAt: 120, options: ['yes', 'no'], dangerAnswer: 'yes' },
   { id: 'side', triggerAt: 180, options: ['both', 'one', 'little', 'unsure'] },
   { id: 'fever_visible', triggerAt: 300, options: ['hot', 'warm', 'cool'] },
   { id: 'breathing_rate', triggerAt: 360, type: 'breath_counter', options: [] },
   { id: 'responsiveness', triggerAt: 420, options: ['yes', 'no', 'unsure'] },
   { id: 'tone', triggerAt: 480, options: ['floppy', 'stiff', 'mixed'] },
   { id: 'hands_feet', triggerAt: 540, options: ['warm', 'cold', 'clammy'] },
-  { id: 'still_seizing_10', triggerAt: 600, options: ['yes', 'no'], invertColors: true },
+  { id: 'still_seizing_10', triggerAt: 600, options: ['yes', 'no'], dangerAnswer: 'yes' },
   { id: 'post_side', triggerAt: null, options: ['equal', 'weak', 'cant'] },
-  { id: 'post_alert', triggerAt: null, options: ['yes', 'no'], invertColors: true },
+  { id: 'post_alert', triggerAt: null, options: ['yes', 'no'], dangerAnswer: 'yes' },
 ];
 
 // Icon / class mapping for option values
@@ -522,7 +522,8 @@ function renderCurrentQuestion() {
 
   qDef.options.forEach(opt => {
     const meta = OPT_META[opt.value] || { icon: '?', cls: 'unsure' };
-    const cls = qDef.invertColors && meta.cls !== 'unsure'
+    const isDanger = qDef.dangerAnswer && opt.value === qDef.dangerAnswer;
+    const cls = isDanger && meta.cls !== 'unsure'
       ? (meta.cls === 'yes' ? 'no' : meta.cls === 'no' ? 'yes' : meta.cls)
       : meta.cls;
     const btn = document.createElement('button');
@@ -915,7 +916,8 @@ function showQuestion(qDef) {
 
   qDef.options.forEach(value => {
     const meta = OPT_META[value] || { icon: '?', cls: 'unsure' };
-    const cls = qDef.invertColors && meta.cls !== 'unsure'
+    const isDanger = qDef.dangerAnswer && value === qDef.dangerAnswer;
+    const cls = isDanger && meta.cls !== 'unsure'
       ? (meta.cls === 'yes' ? 'no' : meta.cls === 'no' ? 'yes' : meta.cls)
       : meta.cls;
     const btn = document.createElement('button');
