@@ -367,7 +367,7 @@ const QUESTION_IDS = [
   { id: 'still_seizing_2', triggerAt: 120, options: ['yes', 'no'], dangerAnswer: 'yes' },
   { id: 'side', triggerAt: 180, options: ['both', 'one', 'little', 'unsure'] },
   { id: 'fever_visible', triggerAt: 300, options: ['hot', 'warm', 'cool'] },
-  { id: 'breathing_rate', triggerAt: 360, type: 'breath_counter', options: [] },
+  { id: 'breathing_rate', triggerAt: 340, type: 'breath_counter', options: [] },
   { id: 'responsiveness', triggerAt: 420, options: ['yes', 'no', 'unsure'] },
   { id: 'tone', triggerAt: 480, options: ['floppy', 'stiff', 'mixed'] },
   { id: 'hands_feet', triggerAt: 540, options: ['warm', 'cold', 'clammy'] },

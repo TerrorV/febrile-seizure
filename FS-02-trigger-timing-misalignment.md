@@ -72,6 +72,11 @@ The `triggerAt` values were set as raw second counts without ensuring they align
 
 All proposed changes were applied (commits `d01cdd2` and `f5af5a4`). Current triggerAt values in `app.js` match the proposal exactly.
 
+### Further Fix — 2026-10-25
+
+- Aligned `breathing_rate` triggerAt from **360 → 340** (exact 5:40 boundary as documented).
+- `node --check` passes.
+
 ---
 
 ## Testing Required
