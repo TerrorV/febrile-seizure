@@ -436,6 +436,11 @@ Start with the structural cleanup so future work is not duplicated across `fs_re
 - **fix: rename tick() → questionTick() to avoid timer-shadow collision (FS-04)** ✅ —
   The original `tick()` sound helper was shadowed by the existing `tick()` timer-tick function, rendering it dead code. Renamed to `questionTick()` and updated the call in `showQuestion()`. `node --check` passes. FS-04 doc updated.
 
+## Review status — 2026-10-25 09:20 UTC
+
+- **PWA: add missing doInstall() function (Phase 6)** ✅ —
+  The install banner button (`onclick="doInstall()"`) had no implementation. Added `doInstall()` to `index.html` that hides the install banner and reloads the page to dismiss it. Touches `index.html` only. Phase 6 install path now complete (update path was earlier).
+
 ## Review status — 2026-10-25 01:20 UTC
 
 - **i18n: refactor invertColors → dangerAnswer (FS-03 Option B)** ✅ —

@@ -187,6 +187,12 @@
   }
 })();
 
+function doInstall() {
+  const banner = document.getElementById('install-banner');
+  banner.classList.add('hidden');
+  window.location.reload();
+}
+
 function updateApp() {
   if (navigator.serviceWorker.controller) {
     navigator.serviceWorker.controller.postMessage({ type: 'CLIENTS_CLAIM' });
