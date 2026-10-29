@@ -414,7 +414,7 @@ Ship PWA install + offline caching and complete mobile testing.
 
 ## Immediate Next Step
 
-Start with the structural cleanup so future work is not duplicated across `fs_responder.html` and `index.html`.
+All planned phases complete. Next priorities: accessibility pass (heading hierarchy, screen-reader labels), localize ambulance handoff text, and mobile device testing (iPhone Safari, Android Chrome).
 
 ## Review status — 2026-10-24 08:51 UTC
 
