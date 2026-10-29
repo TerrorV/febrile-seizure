@@ -465,3 +465,8 @@ All planned phases complete. Next priorities: localize ambulance handoff text, m
 
 - **a11y: add aria-labels to settings close and backdrop (screen-reader labels)** ✅ —
   Added `aria-label="Close settings"` to the settings modal close button (`×`) and converted the settings-backdrop `<div>` to a `<button>` with the same aria-label. Both were icon-only controls with no accessible name, failing WCAG 4.1.2. Touches `index.html` only. Phase 7 accessibility pass (second item).
+
+## Review status — 2026-10-29 03:20 UTC
+
+- **a11y: add skip-nav link** ✅ —
+  Added a visually hidden "Skip to main content" link at the top of `index.html`, visible on `:focus`, and wrapped `#app` with `id="main-content"` target. Added `.skip-nav` / `.skip-nav:focus` styles to `assets/css/app.css`. `node --check` passes. Phase 7 accessibility pass (third item).
