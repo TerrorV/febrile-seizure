@@ -928,6 +928,9 @@ function showQuestion(qDef) {
     opts.appendChild(btn);
   });
   showScreen('screen-question');
+  // Move focus to the first answer button for keyboard users (WCAG 2.4.3)
+  const firstBtn = opts.querySelector('button');
+  if (firstBtn) firstBtn.focus();
 }
 
 function answerQuestion(q, opt) {

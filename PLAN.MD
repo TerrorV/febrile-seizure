@@ -471,6 +471,11 @@ All planned phases complete. Next priorities: localize ambulance handoff text, m
 - **a11y: add skip-nav link** ✅ —
   Added a visually hidden "Skip to main content" link at the top of `index.html`, visible on `:focus`, and wrapped `#app` with `id="main-content"` target. Added `.skip-nav` / `.skip-nav:focus` styles to `assets/css/app.css`. `node --check` passes. Phase 7 accessibility pass (third item).
 
+## Review status — 2026-10-29 06:20 UTC
+
+- **a11y: focus first question button on show** ✅ —
+  Added `firstBtn.focus()` after `showScreen('screen-question')` in `assets/js/app.js`. Keyboard users now land directly on the first answer button when a new question appears instead of losing focus. Touches `assets/js/app.js` only. `node --check` passes. Phase 7 accessibility pass (fifth item).
+
 ## Review status — 2026-10-29 05:22 UTC
 
 - **a11y: add aria-labels to start-screen language buttons** ✅ —
