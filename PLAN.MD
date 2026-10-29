@@ -470,3 +470,8 @@ All planned phases complete. Next priorities: localize ambulance handoff text, m
 
 - **a11y: add skip-nav link** ✅ —
   Added a visually hidden "Skip to main content" link at the top of `index.html`, visible on `:focus`, and wrapped `#app` with `id="main-content"` target. Added `.skip-nav` / `.skip-nav:focus` styles to `assets/css/app.css`. `node --check` passes. Phase 7 accessibility pass (third item).
+
+## Review status — 2026-10-29 05:22 UTC
+
+- **a11y: add aria-labels to start-screen language buttons** ✅ —
+  Added `aria-label` to EN/ES/BG buttons on the start screen (`index.html` lines 55-57): "English", "Español", "Български". Previously screen readers announced only the abbreviation. `node --check` passes for JS; `JSON.parse` validates all locale files. Phase 7 accessibility pass (fourth item).
