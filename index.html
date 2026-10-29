@@ -112,11 +112,11 @@
 
 <!-- Settings Modal -->
 <div id="settings-modal" class="settings-modal">
-  <div class="settings-backdrop" onclick="closeSettings()"></div>
+  <button class="settings-backdrop" onclick="closeSettings()" aria-label="Close settings"></button>
   <div class="settings-panel">
     <div class="settings-header">
       <div class="settings-title" data-i18n="settings.title">Settings</div>
-      <button class="settings-close" onclick="closeSettings()">×</button>
+      <button class="settings-close" onclick="closeSettings()" aria-label="Close settings">×</button>
     </div>
     <div class="settings-body">
       <div class="settings-section">

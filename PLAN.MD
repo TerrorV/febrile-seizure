@@ -414,7 +414,7 @@ Ship PWA install + offline caching and complete mobile testing.
 
 ## Immediate Next Step
 
-All planned phases complete. Next priorities: accessibility pass (heading hierarchy, screen-reader labels), localize ambulance handoff text, and mobile device testing (iPhone Safari, Android Chrome).
+All planned phases complete. Next priorities: localize ambulance handoff text, mobile device testing (iPhone Safari, Android Chrome), and remaining a11y items (focusable elements with labels, skip-nav link).
 
 ## Review status — 2026-10-24 08:51 UTC
 
@@ -460,3 +460,8 @@ All planned phases complete. Next priorities: accessibility pass (heading hierar
 
 - **a11y: establish heading hierarchy** ✅ —
   Replaced the lone `<div class="start-title">` with an `<h1>` on the start screen (app title). Upgraded the summary section's `<h3>` to `<h2>` for the ambulance heading. The document now has a proper heading hierarchy (h1 → h2). `node -c` passes for all JS; index.html validated via HTML structure check. Phase 7 accessibility pass (first item).
+
+## Review status — 2026-10-29 02:20 UTC
+
+- **a11y: add aria-labels to settings close and backdrop (screen-reader labels)** ✅ —
+  Added `aria-label="Close settings"` to the settings modal close button (`×`) and converted the settings-backdrop `<div>` to a `<button>` with the same aria-label. Both were icon-only controls with no accessible name, failing WCAG 4.1.2. Touches `index.html` only. Phase 7 accessibility pass (second item).
