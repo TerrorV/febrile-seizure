@@ -401,6 +401,13 @@ Ship PWA install + offline caching and complete mobile testing.
   to `index.html`. `node -c` passes for JS; JSON manifests validated. This completes
   ✅ update-notifications and install prompt both implemented (2026-10-25).
 
+## OpenAI overnight review — 2026-10-30 06:00 UTC
+
+- **a11y: focus first question button on show** ✅ — Reviewed commit `93f6444`.
+  The implementation and plan entry match the claimed accessibility slice; all
+  project JavaScript files pass `node --check`, and all three locale JSON files
+  parse successfully. No regression or scope expansion found.
+
 ## Future Items After This Plan
 
 - richer medical context, such as age-aware breathing-rate interpretation
