@@ -566,14 +566,15 @@ function getAudio() {
   return audioCtx;
 }
 function beep(freq, dur, vol, t, type='sine') {
-  const ctx = getAudio(), o = ctx.createOscillator(), g = ctx.createGain();
+  const ctx = getAudio(), startTime = Number.isFinite(t) ? t : ctx.currentTime;
+  const o = ctx.createOscillator(), g = ctx.createGain();
   o.connect(g); g.connect(ctx.destination);
   o.type = type; o.frequency.value = freq;
-  g.gain.setValueAtTime(0, t);
-  g.gain.linearRampToValueAtTime(vol, t + 0.01);
-  g.gain.setValueAtTime(vol, t + dur - 0.03);
-  g.gain.linearRampToValueAtTime(0, t + dur);
-  o.start(t); o.stop(t + dur);
+  g.gain.setValueAtTime(0, startTime);
+  g.gain.linearRampToValueAtTime(vol, startTime + 0.01);
+  g.gain.setValueAtTime(vol, startTime + dur - 0.03);
+  g.gain.linearRampToValueAtTime(0, startTime + dur);
+  o.start(startTime); o.stop(startTime + dur);
 }
 function chime2() {
   const ctx = getAudio(), t = ctx.currentTime;
