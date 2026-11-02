@@ -562,3 +562,16 @@ internally consistent. They remain uncommitted and were not deployed.
 **Checks:** `node --check assets/js/app.js`, `node --check sw.js`, locale
 and manifest JSON parsing, and `git diff --check` all pass. The 1×1 PWA icon
 issue, deployment verification, and browser-console follow-up remain open.
+
+## OpenAI overnight review — 2026-11-02 06:00 UTC
+
+**Status: PASS for local static checks; deployment not accepted.** Reviewed
+commits `e3a6861` (deployment hygiene/favicon/service-worker changes) and
+`cb7ba11` (language-button accessibility labels). Both are local-only: `main`
+is two commits ahead of `origin/main`. Static validation passes, but deployed
+favicon/PWA behavior remains unverified and the declared PWA icons are still
+1×1 PNGs.
+
+**Checks:** `node --check assets/js/app.js`, `node --check sw.js`, locale and
+manifest JSON parsing, and `git diff --check` all pass. Vladimir was notified
+separately about push/deploy verification and replacement PWA icons.
