@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fs-responder-v1';
+const CACHE_NAME = 'fs-responder-v2';
 const STATIC_ASSETS = [
   './',
   'index.html',
@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
   'assets/i18n/es.json',
   'assets/icons/icon-192.png',
   'assets/icons/icon-512.png',
+  'assets/icons/favicon.svg',
 ];
 
 self.addEventListener('install', (event) => {

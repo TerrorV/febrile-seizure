@@ -488,6 +488,71 @@ All planned phases complete. Next priorities: localize ambulance handoff text, m
 - **a11y: add aria-labels to start-screen language buttons** ✅ —
   Added `aria-label` to EN/ES/BG buttons on the start screen (`index.html` lines 55-57): "English", "Español", "Български". Previously screen readers announced only the abbreviation. `node --check` passes for JS; `JSON.parse` validates all locale files. Phase 7 accessibility pass (fourth item).
 
+## Overnight triage — 2026-10-30
+
+**Confirmed:** this is a static HTML/CSS/JS PWA; there is no backend/API code, and
+Azure workflow `api_location` is empty. The deployed root, app script, stylesheet,
+locale JSON, manifest, and service worker all return HTTP 200. `/favicon.ico`
+returns 404 because the page had no explicit favicon link; that 404 is cosmetic
+and does not explain a blank page. The existing `icon-192.png` and `icon-512.png`
+are each 1×1 pixels despite their names/manifest declarations.
+
+**Local fixes (not pushed/deployed):** CI now uses `actions/checkout@v5` and
+`ubuntu-24.04`; the redundant OIDC token steps and unsupported
+`github_id_token` input were removed while retaining the configured Azure deploy
+token. Added an explicit SVG favicon and bumped the service-worker cache from
+`fs-responder-v1` to `v2` so an installed copy refreshes its cached shell.
+
+**Overnight follow-up:**
+- [ ] Push/deploy these changes and verify the action no longer reports the
+  Node 20, unsupported-input, or `ubuntu-latest` migration warnings.
+- [ ] Replace the 1×1 PNG PWA icons with valid 192×192 and 512×512 icons; verify
+  installability and offline launch on iPhone Safari and Android Chrome.
+- [ ] Re-test the deployed site in a clean browser and an existing installed
+  PWA. The blank-page symptom was not reproduced here; if it persists, capture
+  the exact URL, device/browser, console errors, and failed network requests.
+
+## Browser console findings — 2026-10-31
+
+**Reported by Vladimir:**
+- Browser warning: “Layout was forced before the page was fully loaded. If
+  stylesheets are not yet loaded this may cause a flash of unstyled content.”
+  Location reported as `index.js:1583:1`.
+- Source map request failed with HTTP 404 for
+  `web-client-credentials-overrides.js.map`; the reported resource URL is the
+  encoded `<anonymous code>` path on the deployed site.
+- `GET /favicon.ico` returns HTTP 404.
+
+**Deployment check:** The root page and `assets/js/app.js` return HTTP 200,
+while `/favicon.ico` and `/assets/icons/favicon.svg` both return HTTP 404. The
+currently served HTML has no favicon link. The working tree contains a favicon
+link and `assets/icons/favicon.svg`, consistent with the earlier local,
+not-yet-deployed favicon fix; deploy it before treating the favicon finding as
+resolved.
+
+**Triage:** The `index.js` location does not match the current app script path
+(`assets/js/app.js`), so the layout warning's source and whether it causes a
+visible flash remain unverified. The `web-client-credentials-overrides.js`
+source map also has not been tied to app code. Recheck both messages in a clean
+browser profile and inspect their initiator/source before changing app code.
+
+**Follow-up:**
+- [ ] Deploy the local favicon fix; verify the deployed page references the
+  SVG and that `/assets/icons/favicon.svg` returns HTTP 200.
+- [ ] Reproduce or clear the layout warning in a clean browser; if it persists,
+  identify the loaded script and determine whether a visible flash occurs.
+- [ ] Check the source-map 404 in a clean browser and identify its initiator
+
+## OpenAI overnight review — 2026-10-31 06:00 UTC
+
+**Status: PASS for local static checks; deployment not accepted.** The
+overnight accessibility/deployment hygiene changes are internally consistent,
+but remain uncommitted and undeployed in this worktree.
+
+**Checks:** `node --check assets/js/app.js`, `node --check sw.js`, JSON parsing
+for all locale files and the manifest, and `git diff --check` all pass.
+Existing working-tree changes, including the favicon asset, were preserved.
+
 ## OpenAI overnight review — 2026-11-01 06:00 UTC
 
 **Status: PASS for local static checks; deployment remains unverified.** The
