@@ -1,4 +1,6 @@
-  /* Skip navigation link — visible on focus */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap');
+
+/* Skip navigation link — visible on focus */
 .skip-nav {
   position: absolute;
   left: -9999px;
@@ -20,8 +22,6 @@
   height: auto;
   overflow: visible;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
