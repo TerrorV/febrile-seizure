@@ -195,7 +195,7 @@
       ]
     },
     "nextCardLabel": "Próxima revisión",
-    "nextCardAt": "Próxima revisión a las {time} aproximadamente"
+    "nextCardAt": "Próxima revisión programada para {time}"
   },
   "milestones": {
     "2min": {

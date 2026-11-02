@@ -195,7 +195,7 @@
       ]
     },
     "nextCardLabel": "Следваща проверка",
-    "nextCardAt": "Следваща проверка след около {time}"
+    "nextCardAt": "Следваща проверка е планирана за {time}"
   },
   "milestones": {
     "2min": {

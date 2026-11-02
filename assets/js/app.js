@@ -195,7 +195,7 @@ const EN = {
       ]
     },
     "nextCardLabel": "Next check-in",
-    "nextCardAt": "Next check-in at around {time}"
+    "nextCardAt": "Next check-in scheduled for {time}"
   },
   "milestones": {
     "2min": {
@@ -828,6 +828,13 @@ function fmt(sec) {
   return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
 }
 
+function formatTimerTarget(sec) {
+  const totalSeconds = Math.max(0, Math.floor(sec));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
 function updateTimerStripPhase() {
   const ph = document.getElementById('strip-phase');
   if (elapsed < 120) {
@@ -1097,9 +1104,8 @@ function showWaiting() {
   const nextCard = document.getElementById('next-card');
   if (nextQ) {
     nextCard.style.display = 'block';
-    const mins = Math.round(nextQ.triggerAt / 60);
     document.getElementById('next-card-text').textContent =
-      I18N.t('waiting.nextCardAt', { time: mins < 1 ? '1 min' : mins + ' min' });
+      I18N.t('waiting.nextCardAt', { time: formatTimerTarget(nextQ.triggerAt) });
   } else {
     nextCard.style.display = 'none';
   }

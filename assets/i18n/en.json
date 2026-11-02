@@ -195,7 +195,7 @@
       ]
     },
     "nextCardLabel": "Next check-in",
-    "nextCardAt": "Next check-in at around {time}"
+    "nextCardAt": "Next check-in scheduled for {time}"
   },
   "milestones": {
     "2min": {
