@@ -6,6 +6,19 @@ const EN = {
     "note": "Works without a thermometer, scale, or watch",
     "disclaimer": "Disclaimer: This applet is not reviewed by, endorsed by, or affiliated with any medical professional, medical organization, or health authority."
   },
+  "information": {
+    "summary": "What is a febrile seizure?",
+    "definition": "A febrile seizure is a seizure that can happen in a young child with a fever. It usually affects children between 6 months and 6 years old.",
+    "signsHeading": "What can it look like?",
+    "signs": "A child may become stiff, then twitch, shake or jerk; become unconscious or not respond; vomit or wet themselves. It can look frightening.",
+    "causesHeading": "What causes it?",
+    "causes": "Febrile seizures can happen during an infection that causes a fever. They are thought to be a response to fever in some young children; the exact reason is not always clear. They are not the same as epilepsy.",
+    "afterHeading": "What may happen after it ends?",
+    "after": "The stiffening and jerking stop, but the child may remain unconscious briefly. They may then be sleepy, irritable or confused for up to an hour. When the seizure has ended, place them in the recovery position if they are breathing, and keep watching their breathing. Do not put anything in their mouth.",
+    "urgentHeading": "Get emergency medical help if:",
+    "urgent": "This is the child's first seizure; it lasts more than 5 minutes; they have difficulty breathing; stiffness or jerking affects only one side; they are more sleepy than usual for over an hour after it stops; or they have another seizure within 24 hours. Use your local emergency number.",
+    "source": "Source: NHS — Febrile seizures"
+  },
   "timer": {
     "duration": "seizure duration",
     "phaseObserving": "Observing",
@@ -465,6 +478,17 @@ function applyTranslations() {
   document.getElementById('btn-start').textContent = I18N.t('start.startButton');
   document.getElementById('start-note').textContent = I18N.t('start.note');
   document.getElementById('start-disclaimer').textContent = I18N.t('start.disclaimer');
+  document.getElementById('start-info-summary').textContent = I18N.t('information.summary');
+  document.getElementById('start-info-definition').textContent = I18N.t('information.definition');
+  document.getElementById('start-info-signs-heading').textContent = I18N.t('information.signsHeading');
+  document.getElementById('start-info-signs').textContent = I18N.t('information.signs');
+  document.getElementById('start-info-causes-heading').textContent = I18N.t('information.causesHeading');
+  document.getElementById('start-info-causes').textContent = I18N.t('information.causes');
+  document.getElementById('start-info-after-heading').textContent = I18N.t('information.afterHeading');
+  document.getElementById('start-info-after').textContent = I18N.t('information.after');
+  document.getElementById('start-info-urgent-heading').textContent = I18N.t('information.urgentHeading');
+  document.getElementById('start-info-urgent').textContent = I18N.t('information.urgent');
+  document.getElementById('start-info-source').textContent = I18N.t('information.source');
 
   // Timer strip
   document.querySelector('[data-i18n="timer.duration"]').textContent = I18N.t('timer.duration');

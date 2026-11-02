@@ -506,8 +506,33 @@ token. Added an explicit SVG favicon and bumped the service-worker cache from
 **Overnight follow-up:**
 - [ ] Push/deploy these changes and verify the action no longer reports the
   Node 20, unsupported-input, or `ubuntu-latest` migration warnings.
-- [ ] Replace the 1×1 PNG PWA icons with valid 192×192 and 512×512 icons; verify
-  installability and offline launch on iPhone Safari and Android Chrome.
+- [x] Replace the 1×1 PNG PWA icons with valid 192×192 and 512×512 placeholders;
+  local PNG dimensions verified.
+- [ ] Verify installability and offline launch on iPhone Safari and Android Chrome.
+
+**Artwork decision — 2026-11-02:** Vladimir authorized temporary blank PWA
+images at the declared 192×192 and 512×512 sizes. These are functional
+placeholders, not approved final branding or artwork. Review the final icon
+design later; do not treat artwork approval as a current development blocker.
+The placeholder resolves the image-dimension mismatch locally, but deployed
+installability and offline launch on iPhone Safari and Android Chrome still
+require verification. Replace both placeholder files with reviewed artwork
+before treating visual design as complete.
+
+**Optional medical information panel — 2026-11-02:** Added a collapsed, click-to-open
+section on the start screen describing what a febrile seizure is, common signs,
+fever/infection association, what recovery can look like, and emergency warning
+signs. Copy is based on the [NHS febrile seizures guidance](https://www.nhs.uk/conditions/febrile-seizures/).
+English, Spanish, and Bulgarian strings are included; the translated medical
+copy still needs review by fluent speakers with appropriate clinical knowledge.
+
+**Safety discrepancy for review:** NHS guidance says to seek emergency help if a
+seizure lasts more than 5 minutes, while the current app timer's emergency
+milestone is at 15 minutes. The information panel includes the 5-minute warning,
+but this change does not alter the timer thresholds. Reconcile the timer flow
+with qualified, locally applicable medical guidance before treating the app as
+first-aid advice. Pushing to main triggers the Azure deployment workflow.
+
 - [ ] Re-test the deployed site in a clean browser and an existing installed
   PWA. The blank-page symptom was not reproduced here; if it persists, capture
   the exact URL, device/browser, console errors, and failed network requests.

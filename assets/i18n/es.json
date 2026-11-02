@@ -9,6 +9,19 @@
     "note": "Funciona sin termómetro, báscula ni reloj",
     "disclaimer": "Aviso: Esta aplicación no ha sido revisada, respaldada ni asociada con ningún profesional médico, organización médica ni autoridad de salud."
   },
+  "information": {
+    "summary": "¿Qué es una convulsión febril?",
+    "definition": "Una convulsión febril es una convulsión que puede ocurrir en un niño pequeño cuando tiene fiebre. Suele afectar a niños de entre 6 meses y 6 años.",
+    "signsHeading": "¿Qué aspecto puede tener?",
+    "signs": "El niño puede ponerse rígido y luego temblar o tener sacudidas; perder el conocimiento o no responder; vomitar o hacerse pis. Puede resultar aterrador verlo.",
+    "causesHeading": "¿Qué la causa?",
+    "causes": "Puede ocurrir durante una infección que causa fiebre. Se cree que es una respuesta a la fiebre en algunos niños pequeños; no siempre se conoce el motivo exacto. No es lo mismo que la epilepsia.",
+    "afterHeading": "¿Qué puede pasar cuando termina?",
+    "after": "La rigidez y las sacudidas paran, pero el niño puede seguir inconsciente brevemente. Después puede estar somnoliento, irritable o confuso hasta una hora. Cuando termine la convulsión, colóquelo en posición lateral de seguridad si respira y vigile su respiración. No le ponga nada en la boca.",
+    "urgentHeading": "Solicite ayuda médica de emergencia si:",
+    "urgent": "Es la primera convulsión del niño; dura más de 5 minutos; tiene dificultad para respirar; la rigidez o las sacudidas afectan solo a un lado; está más somnoliento de lo habitual durante más de una hora después; o tiene otra convulsión en 24 horas. Use el número local de emergencias.",
+    "source": "Fuente: NHS — Convulsiones febriles"
+  },
   "timer": {
     "duration": "duración de la convulsión",
     "phaseObserving": "Observando",

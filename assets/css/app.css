@@ -193,6 +193,40 @@
   .btn-settings:hover { background: var(--border); color: var(--text); }
   .btn-settings:active { transform: scale(0.97); }
   .start-note { font-size: 12px; color: var(--text3); }
+  .start-info {
+    width: 100%;
+    max-width: 360px;
+    text-align: left;
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .start-info summary {
+    padding: 11px 14px;
+    color: var(--info);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .start-info-content { padding: 0 14px 14px; }
+  .start-info-content h2 {
+    margin-top: 12px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .start-info-content p { margin-top: 5px; }
+  .start-info-urgent {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--warn-bg);
+    color: var(--text);
+  }
+  .start-info-urgent h2 { margin-top: 0; }
+  .start-info-source a { color: var(--info); }
   .start-disclaimer {
     max-width: 320px;
     padding: 12px 14px;

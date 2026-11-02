@@ -48,6 +48,23 @@
       <h1 class="start-title" id="app-title">Seizure First Aid</h1>
       <div class="start-sub" id="start-subtitle">Press start the moment the seizure begins. I'll guide you through what to watch for.</div>
      <button class="btn-start-main" id="btn-start" onclick="startSession()">Start timer now</button>
+      <details class="start-info">
+        <summary id="start-info-summary">What is a febrile seizure?</summary>
+        <div class="start-info-content">
+          <p id="start-info-definition"></p>
+          <h2 id="start-info-signs-heading"></h2>
+          <p id="start-info-signs"></p>
+          <h2 id="start-info-causes-heading"></h2>
+          <p id="start-info-causes"></p>
+          <h2 id="start-info-after-heading"></h2>
+          <p id="start-info-after"></p>
+          <div class="start-info-urgent">
+            <h2 id="start-info-urgent-heading"></h2>
+            <p id="start-info-urgent"></p>
+          </div>
+          <p class="start-info-source"><a href="https://www.nhs.uk/conditions/febrile-seizures/" target="_blank" rel="noopener noreferrer" id="start-info-source"></a></p>
+        </div>
+      </details>
        <div class="start-note" id="start-note">Works without a thermometer, scale, or watch</div>
        <div class="start-disclaimer" id="start-disclaimer">Disclaimer: This applet is not reviewed by, endorsed by, or affiliated with any medical professional, medical organization, or health authority.</div>
        <button class="btn-settings" id="btn-settings" onclick="showSettings()">⚙ Settings</button>
