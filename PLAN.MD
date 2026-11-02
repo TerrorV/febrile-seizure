@@ -600,3 +600,16 @@ favicon/PWA behavior remains unverified and the declared PWA icons are still
 **Checks:** `node --check assets/js/app.js`, `node --check sw.js`, locale and
 manifest JSON parsing, and `git diff --check` all pass. Vladimir was notified
 separately about push/deploy verification and replacement PWA icons.
+
+## Runtime and localization repair — 2026-11-02
+
+Fixed a Web Audio failure that could abort `startSession()` before the waiting
+screen appeared. `beep()` now validates the audio context time and its computed
+schedule, and treats audio as optional so a browser audio error cannot block the
+responder flow. Added the missing `app.title` and `app.langName` entries to the
+embedded English dictionary and localize the document title. Bumped the service
+worker cache to `fs-responder-v6` so installed copies fetch the repair.
+
+**Verification:** Focused mocked Web Audio and session-flow checks, JavaScript
+syntax, locale/manifest JSON parsing, and `git diff --check` pass. Real-browser
+visual verification remains outstanding.

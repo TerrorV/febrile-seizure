@@ -1,5 +1,9 @@
   // ── Embedded translation dictionaries ──────────────────────────────────────
 const EN = {
+  "app": {
+    "title": "Seizure First Aid",
+    "langName": "English"
+  },
 "start": {
     "subtitle": "Press start the moment the seizure begins. I'll guide you through what to watch for.",
     "startButton": "Start timer now",
@@ -473,6 +477,7 @@ function switchLanguage(lang) {
 
 function applyTranslations() {
   // Start screen
+  document.title = I18N.t('app.title');
   document.getElementById('app-title').textContent = I18N.t('app.title');
   document.getElementById('start-subtitle').textContent = I18N.t('start.subtitle');
   document.getElementById('btn-start').textContent = I18N.t('start.startButton');
@@ -566,15 +571,21 @@ function getAudio() {
   return audioCtx;
 }
 function beep(freq, dur, vol, t, type='sine') {
-  const ctx = getAudio(), startTime = Number.isFinite(t) ? t : ctx.currentTime;
-  const o = ctx.createOscillator(), g = ctx.createGain();
-  o.connect(g); g.connect(ctx.destination);
-  o.type = type; o.frequency.value = freq;
-  g.gain.setValueAtTime(0, startTime);
-  g.gain.linearRampToValueAtTime(vol, startTime + 0.01);
-  g.gain.setValueAtTime(vol, startTime + dur - 0.03);
-  g.gain.linearRampToValueAtTime(0, startTime + dur);
-  o.start(startTime); o.stop(startTime + dur);
+  try {
+    const ctx = getAudio();
+    const startTime = Number.isFinite(t) ? t : ctx.currentTime;
+    const endTime = startTime + dur;
+    if (!Number.isFinite(startTime) || !Number.isFinite(endTime) ||
+        !Number.isFinite(freq) || !Number.isFinite(vol) || !Number.isFinite(dur) || dur <= 0) return;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, startTime);
+    g.gain.linearRampToValueAtTime(vol, startTime + 0.01);
+    g.gain.setValueAtTime(vol, endTime - 0.03);
+    g.gain.linearRampToValueAtTime(0, endTime);
+    o.start(startTime); o.stop(endTime);
+  } catch (e) {}
 }
 function chime2() {
   const ctx = getAudio(), t = ctx.currentTime;
