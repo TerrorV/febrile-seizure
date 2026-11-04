@@ -253,7 +253,7 @@ Support `light`, `dark`, and `system` theme modes without reducing contrast or e
 - Add theme variants:
   - `[data-theme="dark"]`
   - `[data-theme="light"]`
-- Add a `system` option that follows `prefers-color-scheme`.
+- Add a `system` option that follows the device's current `prefers-color-scheme` setting and updates if that setting changes while the app is open.
 - Test critical states in both themes:
   - start screen
   - question buttons
@@ -265,6 +265,7 @@ Support `light`, `dark`, and `system` theme modes without reducing contrast or e
 ### Acceptance Criteria
 
 - Users can select light, dark, or system mode.
+- In system mode, the active theme tracks the device's current light/dark setting, including changes made while the app is open; manually selected light or dark mode remains fixed.
 - Theme preference persists across reloads.
 - Both themes remain clear outdoors and in low-light conditions.
 
@@ -351,8 +352,10 @@ Allow installable, offline-friendly use from a phone home screen.
 - Summary generation and sharing
 - Translation switching
 - Theme switching
+- System theme updates after the device appearance changes while the app is open
 - Persistence load/save/clear
 - Offline reload after install
+- Screen-awake behavior during an active responder session, including graceful handling when the browser does not support or grant a wake lock
 
 ### Device Testing
 
@@ -410,6 +413,7 @@ Ship PWA install + offline caching and complete mobile testing.
 
 ## Future Items After This Plan
 
+- Keep the device screen awake while the responder timer/session is active, using the Screen Wake Lock API where available; release the wake lock when the session ends and handle unsupported, denied, or interrupted wake locks gracefully.
 - richer medical context, such as age-aware breathing-rate interpretation
 - localization of shared ambulance handoff text
 - optional caregiver notes
@@ -421,7 +425,7 @@ Ship PWA install + offline caching and complete mobile testing.
 
 ## Immediate Next Step
 
-All planned phases complete. Next priorities: localize ambulance handoff text, mobile device testing (iPhone Safari, Android Chrome), and remaining a11y items (focusable elements with labels, skip-nav link).
+All planned phases complete. Next priorities: implement and test screen-awake behavior during active sessions, verify live system-theme tracking on mobile devices, localize ambulance handoff text, mobile device testing (iPhone Safari, Android Chrome), and remaining a11y items (focusable elements with labels, skip-nav link).
 
 ## Review status — 2026-10-24 08:51 UTC
 
