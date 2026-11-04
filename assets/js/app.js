@@ -342,6 +342,7 @@ let timerInterval = null;
 let elapsed = 0;
 let startWall = null;
 let running = false;
+let wakeLock = null;
 let sessionEnded = false;
 let milestonesFired = { 2: false, 15: false, 30: false };
 let answers = [];   // { qid, answer, label, elapsed }
@@ -785,10 +786,11 @@ function clearSavedData() {
 }
 
 // ── Session logic ──────────────────────────────────────────────────────────────
-function startSession() {
+async function startSession() {
   try { getAudio().resume(); } catch(e) {}
   startWall = new Date();
   running = true;
+  try { await navigator.wakeLock.request('screen'); } catch(e) {}
   elapsed = 0;
   answers = [];
   milestonesFired = { 2: false, 15: false, 30: false };
@@ -988,6 +990,7 @@ function seizureStopped() {
   calmConfirm();
   if (sessionEnded) return;
   sessionEnded = true;
+  if (wakeLock) { wakeLock.release().then(() => { wakeLock = null; }).catch(() => {}); }
   clearInterval(timerInterval);
   clearBreathingTimers();
   running = false;

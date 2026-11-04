@@ -628,3 +628,11 @@ final artwork is pending later Vladimir review and is not an immediate blocker.
 **Checks:** `node --check assets/js/app.js`, `node --check sw.js`, locale JSON
 parsing, and `git diff --check` pass. Deployment/installability and real-browser
 verification remain unverified; no task acceptance was inferred.
+
+## Review status — 2026-11-04 08:22 UTC
+
+- **a11y: keep screen awake during active session (wake lock API)** ✅ —
+  Added `navigator.wakeLock.request('screen')` at `startSession()` start and
+  `wakeLock.release()` at `seizureStopped()` end. All calls wrapped in try/catch
+  so unsupported or denied wake locks do not block the responder flow. `node --check`
+  passes. `assets/js/app.js` only. Phase 7 a11y pass (screen-awake item).
