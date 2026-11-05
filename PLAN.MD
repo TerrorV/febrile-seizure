@@ -636,3 +636,19 @@ verification remain unverified; no task acceptance was inferred.
   `wakeLock.release()` at `seizureStopped()` end. All calls wrapped in try/catch
   so unsupported or denied wake locks do not block the responder flow. `node --check`
   passes. `assets/js/app.js` only. Phase 7 a11y pass (screen-awake item).
+
+## OpenAI overnight review — 2026-11-05 06:00 UTC
+
+**Status: PASS after bounded corrective fix.** Reviewed Febrile commits
+65028cb and 57ae41d against the selected theme/wake-lock plan items. The
+wake-lock implementation requested a screen lock but discarded the returned
+lock object, making its release path ineffective. Corrected only that defect:
+startSession() now stores the returned lock before seizureStopped() releases
+it. The authorized blank 192×192 and 512×512 PWA icons remain temporary
+placeholders pending later Vladimir review, not an immediate blocker.
+
+**Checks:** `node --check assets/js/app.js` — PASS; `node --check sw.js` — PASS;
+locale JSON and manifest parsing — PASS; `git diff --check` — PASS.
+Deployment/installability and real-browser verification remain unverified.
+The review window contained 3 successful and 12 timed-out Febrile hourly
+llamacpp runs; no additional worker commit was evidenced.

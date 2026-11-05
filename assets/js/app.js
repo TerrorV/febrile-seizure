@@ -790,7 +790,7 @@ async function startSession() {
   try { getAudio().resume(); } catch(e) {}
   startWall = new Date();
   running = true;
-  try { await navigator.wakeLock.request('screen'); } catch(e) {}
+  try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
   elapsed = 0;
   answers = [];
   milestonesFired = { 2: false, 15: false, 30: false };
