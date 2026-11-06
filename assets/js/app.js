@@ -559,6 +559,7 @@ function renderCurrentQuestion() {
     const btn = document.createElement('button');
     btn.className = 'q-btn ' + cls;
     const label = I18N.t('questions.' + qid + '.options.' + opt.value);
+    btn.setAttribute('aria-label', label);
     btn.innerHTML = `<div class="q-btn-icon">${meta.icon}</div><div>${label}</div>`;
     btn.onclick = () => answerQuestion(qDef, opt);
     opts.appendChild(btn);
