@@ -637,6 +637,13 @@ verification remain unverified; no task acceptance was inferred.
   so unsupported or denied wake locks do not block the responder flow. `node --check`
   passes. `assets/js/app.js` only. Phase 7 a11y pass (screen-awake item).
 
+## Review status — 2026-11-06 06:57 UTC
+
+- **a11y: add aria-label to question answer buttons** ✅ —
+  Added `btn.setAttribute('aria-label', label)` to `renderCurrentQuestion()` so
+  screen readers announce each option's text. `node --check` passes. `assets/js/app.js` only.
+  Phase 7 remaining a11y items (focusable elements with labels).
+
 ## OpenAI overnight review — 2026-11-05 06:00 UTC
 
 **Status: PASS after bounded corrective fix.** Reviewed Febrile commits
