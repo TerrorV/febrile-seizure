@@ -627,9 +627,9 @@ function updateVitalsTimestamp() {
 }
 
 function classifyBreathingRate(bpm) {
-  if (bpm < 20) return { sev: 'warn', text: I18N.t('banners.breathSlow', { bpm }) };
-  if (bpm > 40) return { sev: 'warn', text: I18N.t('banners.breathFast', { bpm }) };
-  return { sev: 'ok', text: I18N.t('banners.breathOk', { bpm }) };
+  if (bpm < 20) return { sev: 'warn', text: I18N.t('banners.breathSlow.text', { bpm }) };
+  if (bpm > 40) return { sev: 'warn', text: I18N.t('banners.breathFast.text', { bpm }) };
+  return { sev: 'ok', text: I18N.t('banners.breathOk.text', { bpm }) };
 }
 
 function renderBreathingResult() {

@@ -1,5 +1,12 @@
 # Febrile Seizure Responder Development Plan
 
+## Review status — 2026-11-07 08:22 UTC
+
+- **i18n: fix breathing-rate banner key path (`.text` suffix)** ✅ —
+  `I18N.t('banners.breathSlow')` (and `breathFast`/`breathOk`) resolved to a nested
+  object, producing `"[object Object]"` in the banner. Appended `.text` to each key
+  so `t()` returns the string value. `node --check` passes. `assets/js/app.js` only.
+
 ## OpenAI overnight review — 2026-11-07 06:00 UTC
 
 **Status: PASS for the reviewed local slice; deployment/installability not
