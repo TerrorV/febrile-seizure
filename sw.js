@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fs-responder-v7';
+const CACHE_NAME = 'fs-responder-v8';
 const STATIC_ASSETS = [
   './',
   'index.html',

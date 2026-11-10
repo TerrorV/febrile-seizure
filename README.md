@@ -70,7 +70,7 @@ The app is a Progressive Web App that can be installed from a phone's home scree
 - `manifest.webmanifest`
 
 **Cache updates:**
-- The service worker (`sw.js`) uses a stale-while-revalidate strategy for assets.
+- The service worker (`sw.js`) serves cached assets first and refreshes its versioned cache when a new worker installs.
 - When a new version is deployed, the service worker updates in the background and shows a small "New version available" banner with a reload button.
 - Users can skip the update via the skip-wait button.
 
@@ -84,11 +84,11 @@ The app is a Progressive Web App that can be installed from a phone's home scree
 Settings and child profile data are stored in `localStorage` under namespaced keys.
 
 **What is stored:**
-- `fsResponder.settings` — language preference, theme mode, and schema version.
-- `fsResponder.profile` — child age (years) and weight (kg), with a `lastUpdated` timestamp.
+- `febrile-seizure-settings` — language preference, theme mode, and child age/weight with an update timestamp.
+- `febrile-seizure-settings-version` — settings schema version.
 
 **Schema versioning:**
-- Each stored object carries a `v` field. On mismatch the app clears stale data and starts fresh, preventing corruption from schema changes.
+- The app records schema version 1 separately. Existing settings without a version are retained and stamped with the current version; malformed settings are cleared.
 
 **Privacy:**
 - All data stays on the user's device. Nothing is sent to any server.

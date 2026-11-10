@@ -367,12 +367,13 @@ let vitalChecks = {
 I18N.register('en', EN);
 
 // Load translations via fetch (falls back silently if offline)
-fetch('assets/i18n/es.json')
+const localeLoads = {};
+localeLoads.es = fetch('assets/i18n/es.json')
   .then(r => r.json())
   .then(data => { I18N.register('es', data); })
   .catch(() => { /* es.json not available */ });
 
-fetch('assets/i18n/bg.json')
+localeLoads.bg = fetch('assets/i18n/bg.json')
   .then(r => r.json())
   .then(data => { I18N.register('bg', data); })
   .catch(() => { /* bg.json not available */ });
@@ -430,8 +431,7 @@ function setTheme(mode) {
   document.documentElement.setAttribute('data-theme', effective);
   // Persist preference
   try {
-    const existing = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...existing, themeMode: mode }));
+    writeSettings({ themeMode: mode });
   } catch(e) { /* ignore */ }
   // Update theme button states
   document.querySelectorAll('#settings-theme-row .lang-btn').forEach(b => {
@@ -440,7 +440,7 @@ function setTheme(mode) {
 }
 
 function applySystemTheme() {
-  const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+  const s = readSettings();
   if (s.themeMode === 'system') {
     const effective = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', effective);
@@ -449,28 +449,31 @@ function applySystemTheme() {
 
 // Listen for system theme changes when in system mode
 function initTheme() {
-  const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+  const s = readSettings();
   const mode = s.themeMode || 'dark'; // default to dark
   setTheme(mode);
   // Hook system theme changes
   window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
-    if (JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}').themeMode === 'system') {
+    if (readSettings().themeMode === 'system') {
       applySystemTheme();
     }
   });
 }
 
 // ── Language switcher ──────────────────────────────────────────────────────────
-function switchLanguage(lang) {
+let languageChange = 0;
+async function switchLanguage(lang) {
+  const change = ++languageChange;
+  if (localeLoads[lang]) await localeLoads[lang];
+  if (change !== languageChange || !I18N.dicts[lang]) return;
   I18N.setLanguage(lang);
   applyTranslations();
-  document.querySelectorAll('.lang-btn').forEach(b => {
+  document.querySelectorAll('[data-lang].lang-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === lang);
   });
   // Persist language preference
   try {
-    const existing = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...existing, lang }));
+    writeSettings({ lang });
   } catch(e) { /* ignore */ }
   // Update html lang attribute
   document.documentElement.lang = lang;
@@ -718,18 +721,14 @@ const VERSION_KEY = 'febrile-seizure-settings-version';
 const SCHEMA_VERSION = 1;
 
 function readSettings() {
-  // Check schema version; clear if mismatched or corrupt.
-  const ver = localStorage.getItem(VERSION_KEY);
-  if (ver !== String(SCHEMA_VERSION)) {
-    if (ver !== null) { /* migrated: clear old schema */ }
-    localStorage.removeItem(SETTINGS_KEY);
-    localStorage.setItem(VERSION_KEY, String(SCHEMA_VERSION));
-    return {};
-  }
   try {
-    return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    if (!settings || typeof settings !== 'object' || Array.isArray(settings)) throw new Error('Invalid settings');
+    if (localStorage.getItem(VERSION_KEY) !== String(SCHEMA_VERSION)) {
+      localStorage.setItem(VERSION_KEY, String(SCHEMA_VERSION));
+    }
+    return settings;
   } catch(e) {
-    /* corrupt — reset */
     localStorage.removeItem(SETTINGS_KEY);
     return {};
   }
@@ -756,7 +755,7 @@ function showSettings() {
   } catch(e) { /* ignore corrupt data */ }
   // Highlight current language
   document.querySelectorAll('#settings-lang-row .lang-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === I18N.currentLang);
+    b.classList.toggle('active', b.dataset.lang === I18N.current);
   });
 }
 
@@ -1300,12 +1299,10 @@ function restart() {
 
 // ── Init ───────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // Restore saved language preference before applying translations
+  initTheme();
   try {
-    const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
-    if (s.lang && I18N.dicts[s.lang]) {
-      I18N.setLanguage(s.lang);
-    }
+    const saved = readSettings().lang;
+    if (saved) switchLanguage(saved);
   } catch(e) { /* ignore corrupt data */ }
   applyTranslations();
 });
